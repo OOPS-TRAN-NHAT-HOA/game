@@ -17,6 +17,7 @@
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}",
+            "projectName": "${Project}",
             "vmArgs": "--module-path \"javafx-sdk-22.0.1/lib\" --add-modules javafx.controls,javafx.fxml"
         }
     ]
