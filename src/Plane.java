@@ -6,15 +6,12 @@ import java.util.*;
 
 public class Plane extends Entity {
 
-    private boolean winner;
-    private boolean alive;
     private int speed = 15;
 
     public Plane(double x, double y) {
         setImage("file:images/plane.png", x, y);
         setCollidable(true);
-        winner = false;
-        alive = true;
+        this.alive = true;
     }
 
     public void update(Scene scene){

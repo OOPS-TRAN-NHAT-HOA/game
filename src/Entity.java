@@ -9,6 +9,8 @@ abstract public class Entity {
     
     protected Image image;
     protected double xPos,yPos;
+    
+    protected boolean alive;
 
     //setImage 
     public void setImage(String path, double x, double y) {
