@@ -9,6 +9,14 @@
             "name": "App",
             "request": "launch",
             "mainClass": "App",
+            "projectName": "Project_b0615e68",
+            "vmArgs": "--module-path \"javafx-sdk-22.0.1/lib\" --add-modules javafx.controls,javafx.fxml"
+        },
+        {
+            "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "App",
             "projectName": "Project_de235260",
             "vmArgs": "--module-path \"javafx-sdk-22.0.1/lib\" --add-modules javafx.controls,javafx.fxml"
         },
