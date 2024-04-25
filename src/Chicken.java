@@ -1,6 +1,0 @@
-import javafx.animation.KeyFrame;// Declare class java.fx...
-import javafx.animation.Timeline;// Declare class java.fx...
-import javafx.animation.Duration;
-
-public class Chicken  {
-}
