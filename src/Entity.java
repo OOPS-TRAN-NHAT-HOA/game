@@ -61,10 +61,13 @@ abstract public class Entity {
 
     public void setCollidable(boolean tmp){
     	isCollidable = tmp;
-        this.setColliBox(xPos, yPos, this.getWidth(), this.getHeight());
+        if (tmp) {
+            this.setColliBox(xPos, yPos, this.getWidth(), this.getHeight());
+        }
     }
 
     public void setColliBox(double x, double y, double width, double height){
+        isCollidable = true;
     	collisionBox = new Rectangle(x, y, width, height);
     }
 
