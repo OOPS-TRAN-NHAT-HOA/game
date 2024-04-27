@@ -13,7 +13,7 @@ public class GamePane extends Pane {
     private final int fps = 60;
     private MyMap map;
     private Plane plane;
-    private List<Monster> monster;
+    private List<Monster> monsters;
 
     public Canvas canvas;
     public GraphicsContext gc;
@@ -25,8 +25,9 @@ public class GamePane extends Pane {
         this.gc = canvas.getGraphicsContext2D();
         this.gameScene = new Scene(this);
 
-        this.plane = new Plane(505, 550, gc, this);
+        this.plane = new Plane(505, 550, this);
         this.map = new MyMap(0, 0);
+        this.monsters = new ArrayList<>();
 
         this.getChildren().add(canvas);
         this.start();
@@ -39,6 +40,8 @@ public class GamePane extends Pane {
     private void draw(GraphicsContext gc){
         map.draw(gc);
         plane.draw(gc);
+        monsters.forEach(monster -> monster.draw(gc));
+        plane.getBullets().forEach(bullet -> bullet.draw(gc));
     }
 
     private void start() {

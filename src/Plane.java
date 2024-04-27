@@ -13,16 +13,18 @@ public class Plane extends Entity {
     protected boolean alive;
     private Timeline shootingTimeline;
 
+    private List<Bullet> planeBullets;
     private GamePane gamePane;
-    private GraphicsContext gc;
 
 
-    Plane(int x, int y, GraphicsContext _gc, GamePane _pane) {
+    Plane(int x, int y, GamePane _pane) {
         this.setImage("file:images/plane.png", x, y);
+
         this.setCollidable(true);
         this.alive = true;
+        this.planeBullets = new ArrayList<>();
+
         this.gamePane = _pane;
-        this.gc = _gc;
     }
 
 
@@ -100,6 +102,9 @@ public class Plane extends Entity {
         setY(getY() + speed);
     }
 
+    public List<Bullet> getBullets() {
+        return this.planeBullets;
+    }
     // plane attack
     private void shoot() {
         Bullet bullet = new Bullet("file:images/shot.png");
@@ -108,7 +113,8 @@ public class Plane extends Entity {
         bullet.setY(this.getY());
 
         this.gamePane.getChildren().add(bullet.getColliBox());
-        bullet.move(gc);
+        planeBullets.add(bullet);
+        bullet.move();
     }
 
     private void startShooting() {
@@ -116,7 +122,7 @@ public class Plane extends Entity {
             shootingTimeline = new Timeline(new KeyFrame(Duration.millis(200), e -> {
                 this.shoot();
             }));
-            shootingTimeline.setCycleCount(Timeline.INDEFINITE);
+            shootingTimeline.setCycleCount(100);
             shootingTimeline.play();
         }
     }

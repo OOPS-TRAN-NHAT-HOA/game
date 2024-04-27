@@ -21,11 +21,10 @@ public class Bullet extends Entity {
         gc.drawImage(this.getImage(), this.xPos, this.yPos, this.getWidth(), this.getHeight());
     }
 
-    public void move(GraphicsContext gc) {
+    public void move() {
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(20), e -> {
             this.setX(this.getX() + Vx);
             this.setY(this.getY() + Vy);
-            this.draw(gc);
         }));
         timeline.setCycleCount(100);
         timeline.play();
