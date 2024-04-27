@@ -1,3 +1,4 @@
+
 import java.util.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -9,6 +10,7 @@ public class Monster extends Entity {
     protected double Vx = 0;
     protected double Vy = 1;
     protected boolean alive;
+    private Timeline timeline;
 
     private Random rand = new Random();
 
@@ -38,7 +40,7 @@ public class Monster extends Entity {
             this.newVelocity();
         }));
 
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(20), e -> {
+        timeline = new Timeline(new KeyFrame(Duration.millis(20), e -> {
             double nx = this.getX() + Vx;
             double ny = this.getY() + Vy;
             if (0 <= nx && nx < Width) {

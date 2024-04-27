@@ -1,3 +1,4 @@
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
@@ -7,6 +8,7 @@ public class Bullet extends Entity {
     private double Vx;
     private double Vy;
     private boolean moving;
+    private Timeline timeline;
 
     Bullet(String path) {
         super(path);
@@ -25,15 +27,18 @@ public class Bullet extends Entity {
     }
 
     public void move() {
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(20), e -> {
+        timeline = new Timeline(new KeyFrame(Duration.millis(20), e -> {
             this.setX(this.getX() + Vx);
             this.setY(this.getY() + Vy);
         }));
         timeline.setCycleCount(100);
-        timeline.setOnFinished(e -> {
-            moving = false;
-        });
         timeline.play();
+    }
+
+    public void stop(){
+        // System.out.println("bullet stop!");
+        moving = false;
+        timeline.stop();
     }
 
     public boolean isStop() {

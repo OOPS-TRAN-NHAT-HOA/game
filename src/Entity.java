@@ -67,7 +67,6 @@ abstract public class Entity {
     }
 
     public void setColliBox(double x, double y, double width, double height){
-        isCollidable = true;
     	collisionBox = new Rectangle(x, y, width, height);
     }
 
@@ -75,13 +74,5 @@ abstract public class Entity {
     	return collisionBox;
     }
     
-    public boolean checkCollision(Rectangle other) throws Exception {
-        if (isCollidable == false) {
-            throw new Exception();
-        }
-        return this.getColliBox().intersects(other.getBoundsInParent());
-    }
-
-
     abstract public void draw(GraphicsContext gc);
 }

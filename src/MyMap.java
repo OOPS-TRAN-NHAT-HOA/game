@@ -1,24 +1,25 @@
+
 import java.util.*;
 import javafx.scene.canvas.GraphicsContext;
 
 public class MyMap extends Entity {
 
     private List<Monster> monsters;
+    private GamePane gp;
 
-	public MyMap(double x, double y){
+	public MyMap(double x, double y, GamePane _gp){
 		setImage("file:images/space.png", x, y);
 		monsters = new ArrayList<>();
+		gp = _gp;
 	}
 
 	public void draw(GraphicsContext gc){
-        gc.drawImage(this.getImage(), this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        gc.drawImage(this.getImage(), this.getX(), this.getY(), gp.getScreenWidth(), gp.getScreenHeight());
     }
 
 	public void spawn(GamePane gamePane) {
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 10; i++) {
 			Monster monster = new Monster("file:images/chicken.png");
-
-			gamePane.getChildren().add(monster.getColliBox());
 			this.monsters.add(monster);
 		}
 	}

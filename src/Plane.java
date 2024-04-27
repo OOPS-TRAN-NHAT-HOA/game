@@ -1,10 +1,10 @@
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.util.Duration;
-
 import java.util.*;
 
 public class Plane extends Entity {
@@ -29,8 +29,6 @@ public class Plane extends Entity {
 
 
     public void update(Scene scene){
-        final List<KeyCode> acceptedCodes = Arrays.asList(KeyCode.LEFT, KeyCode.RIGHT, KeyCode.UP, KeyCode.DOWN);
-        final Set<KeyCode> codes = new HashSet<>();
 
         // control by mouse
         scene.setOnMouseMoved(e -> {
@@ -49,31 +47,18 @@ public class Plane extends Entity {
             this.stopShooting();
         });
 
-        // control by key
-        scene.setOnKeyReleased(e -> {
-                System.out.println("Release!");
-                if (acceptedCodes.contains(e.getCode())){ 
-                codes.remove(e.getCode()); 
-                System.out.println("\nBREAK\n");
-            }});
-            scene.setOnKeyPressed(e -> {
-                System.out.println("Pressed!");
-                if (acceptedCodes.contains(e.getCode())) {
-                    codes.add(e.getCode());
-                    if (codes.contains(KeyCode.LEFT)) {
-                        moveLeft();    
-                    }
-                    else if (codes.contains(KeyCode.RIGHT)) {
-                        moveRight();
-                    }
-                    else if (codes.contains(KeyCode.UP)) {
-                        moveUp();
-                    }
-                    else if (codes.contains(KeyCode.DOWN)) {
-                        moveDown();
-                    }
-                }
-            });
+    }
+
+    public void die(){
+        alive = false;
+        // System.out.println("Die");
+    }
+
+    public boolean isAlive(){
+        if(alive){
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -84,22 +69,6 @@ public class Plane extends Entity {
     public void moveTo(double x, double y) {
         this.setX(x - this.getWidth() / 2);
         this.setY(y - this.getHeight() / 2);
-    }
-
-    public void moveLeft() {
-       setX(getX() - speed);
-    }
-    
-    public void moveRight() {
-        setX(getX() + speed);
-    }
-    
-    public void moveUp() {
-        setY(getY() - speed);
-    }
-    
-    public void moveDown() {
-        setY(getY() + speed);
     }
 
     public List<Bullet> getBullets() {
@@ -113,7 +82,6 @@ public class Plane extends Entity {
         bullet.setX(this.getX() + this.getWidth() / 2 - bullet.getWidth() / 2);
         bullet.setY(this.getY());
 
-        this.gamePane.getChildren().add(bullet.getColliBox());
         planeBullets.add(bullet);
         bullet.move();
     }

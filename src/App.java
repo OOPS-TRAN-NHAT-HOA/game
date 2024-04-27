@@ -1,3 +1,4 @@
+
 import javafx.application.Application;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
@@ -11,7 +12,6 @@ import java.awt.*;
 public class App extends Application {
     private double screenWidth;
     private double screenHeight;
-    // private final int fps = 60;
 
     public static void main(String[] args) throws Exception {
         Application.launch(args);
@@ -31,6 +31,7 @@ public class App extends Application {
         //Main menu
         Pane menuPane = new Pane();
         ImageView bg = new ImageView("file:images/space.png");
+        bg.setFitWidth(screenWidth);
         Scene menuScene = new Scene(menuPane, screenWidth, screenHeight);
 
         // title
