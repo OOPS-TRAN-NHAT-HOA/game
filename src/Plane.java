@@ -105,6 +105,7 @@ public class Plane extends Entity {
     public List<Bullet> getBullets() {
         return this.planeBullets;
     }
+
     // plane attack
     private void shoot() {
         Bullet bullet = new Bullet("file:images/shot.png");

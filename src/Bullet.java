@@ -6,10 +6,13 @@ import javafx.util.Duration;
 public class Bullet extends Entity {
     private double Vx;
     private double Vy;
+    private boolean moving;
 
     Bullet(String path) {
         super(path);
         this.setCollidable(true);
+        this.getColliBox().setVisible(false);
+        moving = true;
     }
     
     public void setSpeed(double vx, double vy) {
@@ -27,6 +30,13 @@ public class Bullet extends Entity {
             this.setY(this.getY() + Vy);
         }));
         timeline.setCycleCount(100);
+        timeline.setOnFinished(e -> {
+            moving = false;
+        });
         timeline.play();
+    }
+
+    public boolean isStop() {
+        return !moving;
     }
 }

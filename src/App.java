@@ -6,11 +6,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import java.awt.*;
 
 public class App extends Application {
-    private final int screenWidth = 1366;
-    private final int screenHeigth = 768;
-    private final int fps = 60;
+    private double screenWidth;
+    private double screenHeight;
+    // private final int fps = 60;
 
     public static void main(String[] args) throws Exception {
         Application.launch(args);
@@ -18,6 +19,11 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
+        // get your screenSize
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        screenWidth = screenSize.getWidth();
+        screenHeight = screenSize.getHeight();
+
         // icon
         Image icon = new Image("file:images/chicken.png");
         stage.getIcons().add(icon);
@@ -25,17 +31,17 @@ public class App extends Application {
         //Main menu
         Pane menuPane = new Pane();
         ImageView bg = new ImageView("file:images/space.png");
-        Scene menuScene = new Scene(menuPane, screenWidth, screenHeigth);
+        Scene menuScene = new Scene(menuPane, screenWidth, screenHeight);
 
         // title
         ImageView title = new ImageView("file:images/title.png");
         title.setX(308);
-        title.setY(50);        
+        title.setY(30);        
 
         // exit button
         Button exitButton = new Button();
         ImageView exit = new ImageView("file:images/exit.png");
-        exitButton.setTranslateX(50);
+        exitButton.setTranslateX(30);
         exitButton.setTranslateY(630);
         exitButton.setPrefSize(exit.getFitWidth(), exit.getFitHeight());
         exitButton.setGraphic(exit);
@@ -47,7 +53,7 @@ public class App extends Application {
         // start button
         Button startButton = new Button();
         ImageView start = new ImageView("file:images/start.png");
-        startButton.setTranslateX(1010);
+        startButton.setTranslateX(940);
         startButton.setTranslateY(630);
         startButton.setPrefSize(start.getFitWidth(), start.getFitHeight());
         startButton.setGraphic(start);

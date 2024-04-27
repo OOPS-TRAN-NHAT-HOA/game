@@ -1,5 +1,5 @@
 import java.util.*;
-
+import java.awt.*;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -8,12 +8,12 @@ import javafx.scene.layout.Pane;
 
 public class GamePane extends Pane {
 
-    private final int screenWidth = 1366;
-    private final int screenHeigth = 768;
     private final int fps = 60;
+    private double gameWidth;
+    private double gameHeight;
+
     private MyMap map;
     private Plane plane;
-    private List<Monster> monsters;
 
     public Canvas canvas;
     public GraphicsContext gc;
@@ -21,13 +21,18 @@ public class GamePane extends Pane {
 
 
     GamePane() {
-        this.canvas = new Canvas(screenWidth, screenHeigth);
+        // get your screenSize
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        gameWidth = screenSize.getWidth();
+        gameHeight = screenSize.getHeight();
+
+        // setup
+        this.canvas = new Canvas(gameWidth, gameHeight);
         this.gc = canvas.getGraphicsContext2D();
         this.gameScene = new Scene(this);
 
         this.plane = new Plane(505, 550, this);
         this.map = new MyMap(0, 0);
-        this.monsters = new ArrayList<>();
 
         this.getChildren().add(canvas);
         this.start();
@@ -35,13 +40,30 @@ public class GamePane extends Pane {
 
     private void update(Scene scene){
         plane.update(scene);
+        if (this.map.getMonsters().size() == 0) {
+            this.map.spawn(this);
+        }
+        // please handle collision
+        
     }
 
     private void draw(GraphicsContext gc){
         map.draw(gc);
         plane.draw(gc);
-        monsters.forEach(monster -> monster.draw(gc));
-        plane.getBullets().forEach(bullet -> bullet.draw(gc));
+
+        // please handle collision
+        Iterator<Bullet> it = this.plane.getBullets().iterator();
+        while (it.hasNext()) {
+            Bullet bullet = it.next();
+            if (bullet.isStop()) {
+                this.getChildren().remove(bullet.getColliBox());
+                it.remove();
+            }
+            else {
+                bullet.draw(gc);
+            }
+        }
+        this.map.getMonsters().forEach(monster -> monster.draw(gc));
     }
 
     private void start() {
