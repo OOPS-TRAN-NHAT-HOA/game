@@ -47,10 +47,16 @@ abstract public class Entity {
     
     public void setX(double x) {
         this.xPos = x;
+        if (isCollidable) {
+            this.getColliBox().setX(x);
+        }
     }
     
     public void setY(double y) {
         this.yPos = y;
+        if (isCollidable) {
+            this.getColliBox().setY(y);
+        }
     }
 
     public void setCollidable(boolean tmp){
