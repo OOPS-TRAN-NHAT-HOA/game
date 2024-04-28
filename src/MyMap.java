@@ -1,29 +1,25 @@
 
-import java.util.*;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import java.util.*;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.util.Duration;
 
 public class MyMap extends Entity {
 
     private List<Monster> monsters;
-	private Random rand = new Random();
+    private GamePane gp;
 
-	public MyMap(double x, double y){
+	public MyMap(double x, double y, GamePane _gp){
 		setImage("file:images/space.png", x, y);
 		monsters = new ArrayList<>();
-		this.move();
+		gp = _gp;
 	}
 
 	public void draw(GraphicsContext gc){
-        gc.drawImage(this.getImage(), this.getX(), this.getY(), this.getWidth(), this.getHeight());
-		gc.drawImage(this.getImage(), this.getX(), this.getY() - this.getHeight(), this.getWidth(), this.getHeight());
+        gc.drawImage(this.getImage(), this.getX(), this.getY(), gp.getScreenWidth(), gp.getScreenHeight());
     }
 
 	public void spawn(GamePane gamePane) {
-		for (int i = 0; i < rand.nextInt(1, 10); i++) {
+		for (int i = 0; i < 10; i++) {
 			Monster monster = new Monster("file:images/chicken.png");
 			this.monsters.add(monster);
 		}
@@ -31,18 +27,5 @@ public class MyMap extends Entity {
 
 	public List<Monster> getMonsters() {
 		return this.monsters;
-	}
-	
-	public void move() {
-		Timeline timeline = new Timeline(new KeyFrame(Duration.millis(100), e-> {
-			if (this.getY() + 1 > this.getHeight()) {
-				this.setY(0);
-			}
-			else {
-				this.setY(this.getY() + 1);
-			}
-		}));
-		timeline.setCycleCount(Timeline.INDEFINITE);
-		timeline.play();
 	}
 }

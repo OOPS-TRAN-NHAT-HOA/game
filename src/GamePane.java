@@ -1,27 +1,33 @@
 
+
 import java.util.*;
 import java.awt.*;
+import javafx.scene.shape.Rectangle;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.control.Button;
+import javafx.stage.Stage;
+import javafx.scene.Cursor;
 
 public class GamePane extends Pane {
 
     private final int fps = 60;
     private double gameWidth;
     private double gameHeight;
-    protected Canvas canvas;
-    protected GraphicsContext gc;
-    protected Scene gameScene;
 
     private MyMap map;
     private Plane plane;
-    private CollisionHandler collisionHandler;
-    private Image gameOver = new Image("file:images/game-over.png");
+    private CollisionHandler planeHandler,bulletHandler;
 
+    public Canvas canvas;
+    public GraphicsContext gc;
+    public Scene gameScene;
+    private AnimationTimer gameloop;
     
     GamePane() {
         // get your screenSize
@@ -33,32 +39,38 @@ public class GamePane extends Pane {
         this.canvas = new Canvas(gameWidth, gameHeight);
         this.gc = canvas.getGraphicsContext2D();
         this.gameScene = new Scene(this);
-
-        this.plane = new Plane(505, 550);
-        this.map = new MyMap(0, 0);
-        collisionHandler = new CollisionHandler();
-
         this.getChildren().add(canvas);
+
         this.start();
     }
 
     private void update(Scene scene){
         plane.update(scene);
-        if (this.map.getMonsters().size() == 0) {
+        if (this.map.getMonsters().size() == 0 && this.plane.isAlive()) {
             this.map.spawn(this);
         }
 
-        for (Monster monster : this.map.getMonsters()) {
-            if (collisionHandler.checkCollision(this.plane, monster)) {
-                this.plane.die();
-            }
-            for (Bullet bullet : this.plane.getBullets()) {
-                if (collisionHandler.checkCollision(bullet, monster)) {
-                    monster.takeDamage(bullet.getDmg());
-                    bullet.stop();
-                }
+        ArrayList<Rectangle> monsterColBox = new ArrayList<Rectangle>();
+        this.map.getMonsters().forEach(monster -> {
+            monsterColBox.add(monster.getColliBox());
+        });
+
+        planeHandler = new CollisionHandler(this.plane.getColliBox(), monsterColBox);
+        if(planeHandler.checkCollision()){
+            this.plane.die();
+            this.map.getMonsters().clear();
+        }
+
+        for(Bullet currentBullet : this.plane.getBullets()){
+            bulletHandler = new CollisionHandler(currentBullet.getColliBox(), monsterColBox);
+            if(bulletHandler.indexOfCollisionBlock() != -1){
+                currentBullet.stop();
+                this.plane.getBullets().remove(currentBullet);
+                this.map.getMonsters().get(bulletHandler.indexOfCollisionBlock()).stop();
+                this.map.getMonsters().remove(bulletHandler.indexOfCollisionBlock());
             }
         }
+
     }
 
     private void draw(GraphicsContext gc){
@@ -66,37 +78,20 @@ public class GamePane extends Pane {
             gc.clearRect(0, 0, gameWidth, gameHeight);
             map.draw(gc);
             plane.draw(gc);
-
-            Iterator<Bullet> it = this.plane.getBullets().iterator();
-            while (it.hasNext()) {
-                Bullet bullet = it.next();
-                if (bullet.isStop()) {
-                    it.remove();
-                }
-                else {
-                    bullet.draw(gc);
-                }
-            }
-
-            Iterator<Monster> it2 = this.map.getMonsters().iterator();
-            while (it2.hasNext()) {
-                Monster monster = it2.next();
-                if (monster.isAlive()) {
-                    monster.draw(gc);
-                }
-                else {
-                    it2.remove();
-                }
-            }
+            this.map.getMonsters().forEach(monster -> monster.draw(gc));
         }
         else{
-            gc.clearRect(0, 0, gameWidth, gameHeight);
-            gc.drawImage(gameOver,0, 0, gameWidth, gameHeight );
+            gameOver();
         }
     }
 
     private void start() {
-        AnimationTimer gameloop = new AnimationTimer(){
+        
+        this.gameScene.setCursor(Cursor.NONE);
+        this.plane = new Plane(505, 550, this);
+        this.map = new MyMap(0, 0, this);
+
+        gameloop = new AnimationTimer(){
             private long prevTime = 0;
             private long timePerFrame = (long) 1e9/fps;
             private double delta = 0;
@@ -112,6 +107,44 @@ public class GamePane extends Pane {
             }
         };
         gameloop.start();
+    }
+
+    private void gameOver(){
+        gc.clearRect(0, 0, gameWidth, gameHeight);
+        gameloop.stop();
+        gameScene.setCursor(Cursor.DEFAULT);
+        ImageView gameOverBg = new ImageView("file:images/game-over.png");
+        gameOverBg.setFitWidth(gameWidth);
+        gameOverBg.setFitHeight(gameHeight);
+        // exit button
+        Button exitButton = new Button();
+        ImageView exit = new ImageView("file:images/exit.png");
+        exitButton.setTranslateX(30);
+        exitButton.setTranslateY(630);
+        exitButton.setPrefSize(exit.getFitWidth(), exit.getFitHeight());
+        exitButton.setGraphic(exit);
+        exitButton.setStyle("-fx-background-color: Transparent");
+        exitButton.setCursor(Cursor.HAND);
+        exitButton.setOnAction(e-> {
+            Stage stage = (Stage) this.gameScene.getWindow();
+            stage.close();
+        });
+
+        // restart button
+        Button restartButton = new Button();
+        ImageView restart = new ImageView("file:images/start.png");
+        restartButton.setTranslateX(940);
+        restartButton.setTranslateY(630);
+        restartButton.setPrefSize(restart.getFitWidth(), restart.getFitHeight());
+        restartButton.setGraphic(restart);
+        restartButton.setStyle("-fx-background-color: Transparent");
+        restartButton.setCursor(Cursor.HAND);
+        restartButton.setOnAction(e-> {
+            this.getChildren().removeAll(gameOverBg,exitButton,restartButton);
+            this.start();
+        });
+
+        this.getChildren().addAll(gameOverBg,exitButton,restartButton);
     }
 
     public double getScreenWidth(){
