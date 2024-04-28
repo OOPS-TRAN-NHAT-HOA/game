@@ -2,7 +2,11 @@
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.*;
+
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.util.Duration;
 
 public class MyMap extends Entity {
 
@@ -12,11 +16,12 @@ public class MyMap extends Entity {
 	public MyMap(double x, double y){
 		setImage("file:images/space.png", x, y);
 		monsters = new ArrayList<>();
+		this.move();
 	}
 
 	public void draw(GraphicsContext gc){
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        gc.drawImage(this.getImage(), this.getX(), this.getY(), screenSize.getWidth(), screenSize.getHeight());
+        gc.drawImage(this.getImage(), this.getX(), this.getY(), this.getWidth(), this.getHeight());
+		gc.drawImage(this.getImage(), this.getX(), this.getY() - this.getHeight(), this.getWidth(), this.getHeight());
     }
 
 	public void spawn(GamePane gamePane) {
@@ -28,5 +33,18 @@ public class MyMap extends Entity {
 
 	public List<Monster> getMonsters() {
 		return this.monsters;
+	}
+	
+	public void move() {
+		Timeline timeline = new Timeline(new KeyFrame(Duration.millis(100), e-> {
+			if (this.getY() + 1 > this.getHeight()) {
+				this.setY(0);
+			}
+			else {
+				this.setY(this.getY() + 1);
+			}
+		}));
+		timeline.setCycleCount(Timeline.INDEFINITE);
+		timeline.play();
 	}
 }
