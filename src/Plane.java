@@ -3,28 +3,24 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
 import javafx.util.Duration;
 import java.util.*;
 
 public class Plane extends Entity {
 
-    private double speed = 30;
     protected boolean alive;
     private Timeline shootingTimeline;
 
     private List<Bullet> planeBullets;
-    private GamePane gamePane;
 
 
-    Plane(int x, int y, GamePane _pane) {
+    Plane(int x, int y) {
         this.setImage("file:images/plane.png", x, y);
 
         this.setCollidable(true);
         this.alive = true;
         this.planeBullets = new ArrayList<>();
 
-        this.gamePane = _pane;
     }
 
 

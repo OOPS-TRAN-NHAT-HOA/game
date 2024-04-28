@@ -1,7 +1,6 @@
 
 import java.util.*;
 import java.awt.*;
-import javafx.scene.shape.Rectangle;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -14,15 +13,15 @@ public class GamePane extends Pane {
     private final int fps = 60;
     private double gameWidth;
     private double gameHeight;
+    protected Canvas canvas;
+    protected GraphicsContext gc;
+    protected Scene gameScene;
 
     private MyMap map;
     private Plane plane;
-    private CollisionHandler planeHandler,bulletHandler;
+    private CollisionHandler collisionHandler;
     private Image gameOver = new Image("file:images/game-over.png");
 
-    public Canvas canvas;
-    public GraphicsContext gc;
-    public Scene gameScene;
     
     GamePane() {
         // get your screenSize
@@ -35,8 +34,9 @@ public class GamePane extends Pane {
         this.gc = canvas.getGraphicsContext2D();
         this.gameScene = new Scene(this);
 
-        this.plane = new Plane(505, 550, this);
-        this.map = new MyMap(0, 0, this);
+        this.plane = new Plane(505, 550);
+        this.map = new MyMap(0, 0);
+        collisionHandler = new CollisionHandler();
 
         this.getChildren().add(canvas);
         this.start();
@@ -48,20 +48,15 @@ public class GamePane extends Pane {
             this.map.spawn(this);
         }
 
-        ArrayList<Rectangle> monsterColBox = new ArrayList<Rectangle>();
-        this.map.getMonsters().forEach(monster -> {
-            monsterColBox.add(monster.getColliBox());
-        });
-
-        planeHandler = new CollisionHandler(this.plane.getColliBox(), monsterColBox);
-        if(planeHandler.checkCollision()){
-            this.plane.die();
-        }
-
-        for(Bullet currentBullet : this.plane.getBullets()){
-            bulletHandler = new CollisionHandler(currentBullet.getColliBox(), monsterColBox);
-            if(bulletHandler.checkCollision()){
-                currentBullet.stop();
+        for (Monster monster : this.map.getMonsters()) {
+            if (collisionHandler.checkCollision(this.plane, monster)) {
+                this.plane.die();
+            }
+            for (Bullet bullet : this.plane.getBullets()) {
+                if (collisionHandler.checkCollision(bullet, monster)) {
+                    monster.takeDamage(bullet.getDmg());
+                    bullet.stop();
+                }
             }
         }
     }
@@ -82,7 +77,17 @@ public class GamePane extends Pane {
                     bullet.draw(gc);
                 }
             }
-            this.map.getMonsters().forEach(monster -> monster.draw(gc));
+
+            Iterator<Monster> it2 = this.map.getMonsters().iterator();
+            while (it2.hasNext()) {
+                Monster monster = it2.next();
+                if (monster.isAlive()) {
+                    monster.draw(gc);
+                }
+                else {
+                    it2.remove();
+                }
+            }
         }
         else{
             gc.clearRect(0, 0, gameWidth, gameHeight);

@@ -5,6 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.util.Duration;
 
 public class Bullet extends Entity {
+    private int damage;
     private double Vx;
     private double Vy;
     private boolean moving;
@@ -13,8 +14,16 @@ public class Bullet extends Entity {
     Bullet(String path) {
         super(path);
         this.setCollidable(true);
-        this.getColliBox().setVisible(false);
-        moving = true;
+        this.moving = true;
+        this.damage = 1;
+    }
+
+    public void setDmg(int dmg) {
+        this.damage = dmg;
+    }
+
+    public int getDmg() {
+        return damage;
     }
     
     public void setSpeed(double vx, double vy) {
