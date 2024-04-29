@@ -1,14 +1,11 @@
-
-
-import java.util.*;
 import java.awt.*;
-import javafx.scene.shape.Rectangle;
+import java.util.Iterator;
+
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
@@ -22,7 +19,7 @@ public class GamePane extends Pane {
 
     private MyMap map;
     private Plane plane;
-    private CollisionHandler planeHandler,bulletHandler;
+    private CollisionHandler collisionHandler;
 
     public Canvas canvas;
     public GraphicsContext gc;
@@ -35,12 +32,14 @@ public class GamePane extends Pane {
         gameWidth = screenSize.getWidth();
         gameHeight = screenSize.getHeight();
 
+        this.collisionHandler = new CollisionHandler();
+
         // setup
         this.canvas = new Canvas(gameWidth, gameHeight);
         this.gc = canvas.getGraphicsContext2D();
         this.gameScene = new Scene(this);
         this.getChildren().add(canvas);
-
+        
         this.start();
     }
 
@@ -49,28 +48,17 @@ public class GamePane extends Pane {
         if (this.map.getMonsters().size() == 0 && this.plane.isAlive()) {
             this.map.spawn(this);
         }
-
-        ArrayList<Rectangle> monsterColBox = new ArrayList<Rectangle>();
-        this.map.getMonsters().forEach(monster -> {
-            monsterColBox.add(monster.getColliBox());
-        });
-
-        planeHandler = new CollisionHandler(this.plane.getColliBox(), monsterColBox);
-        if(planeHandler.checkCollision()){
-            this.plane.die();
-            this.map.getMonsters().clear();
-        }
-
-        for(Bullet currentBullet : this.plane.getBullets()){
-            bulletHandler = new CollisionHandler(currentBullet.getColliBox(), monsterColBox);
-            if(bulletHandler.indexOfCollisionBlock() != -1){
-                currentBullet.stop();
-                this.plane.getBullets().remove(currentBullet);
-                this.map.getMonsters().get(bulletHandler.indexOfCollisionBlock()).stop();
-                this.map.getMonsters().remove(bulletHandler.indexOfCollisionBlock());
+        for (Monster monster : this.map.getMonsters()) {
+            if (collisionHandler.checkCollision(this.plane, monster)) {
+                this.plane.die();
+            }
+            for (Bullet bullet : this.plane.getBullets()) {
+                if (collisionHandler.checkCollision(bullet, monster)) {
+                    monster.takeDamage(bullet.getDamage());
+                    bullet.stop();
+                }
             }
         }
-
     }
 
     private void draw(GraphicsContext gc){
@@ -78,7 +66,17 @@ public class GamePane extends Pane {
             gc.clearRect(0, 0, gameWidth, gameHeight);
             map.draw(gc);
             plane.draw(gc);
-            this.map.getMonsters().forEach(monster -> monster.draw(gc));
+            
+            Iterator<Monster> it = this.map.getMonsters().iterator();
+            while (it.hasNext()) {
+                Monster monster = it.next();
+                if (monster.isAlive()) {
+                    monster.draw(gc);
+                }
+                else {
+                    it.remove();
+                }
+            }
         }
         else{
             gameOver();
@@ -88,8 +86,8 @@ public class GamePane extends Pane {
     private void start() {
         
         this.gameScene.setCursor(Cursor.NONE);
-        this.plane = new Plane(505, 550, this);
-        this.map = new MyMap(0, 0, this);
+        this.plane = new Plane(505, 550);
+        this.map = new MyMap(0, 0);
 
         gameloop = new AnimationTimer(){
             private long prevTime = 0;

@@ -10,12 +10,21 @@ public class Bullet extends Entity {
     private double Vy;
     private boolean moving;
     private Timeline timeline;
+    private int damage;
+        
 
     Bullet(String path) {
         super(path);
         this.setCollidable(true);
         this.getColliBox().setVisible(false);
-        moving = true;
+        this.moving = true;
+        this.damage = 1;
+    }
+    public void setDamage(int dmg) {
+        this.damage = dmg;
+    }
+    public int getDamage() {
+        return this.damage;
     }
     
     public void setSpeed(double vx, double vy) {
@@ -32,12 +41,12 @@ public class Bullet extends Entity {
             this.setX(this.getX() + Vx);
             this.setY(this.getY() + Vy);
         }));
-        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.setCycleCount(100);
         timeline.play();
     }
 
     public void stop(){
-        System.out.println("bullet stop!");
+        // System.out.println("bullet stop!");
         moving = false;
         timeline.stop();
     }

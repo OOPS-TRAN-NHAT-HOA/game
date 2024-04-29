@@ -1,5 +1,7 @@
 
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.util.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -13,6 +15,10 @@ public class Monster extends Entity {
     protected boolean alive;
     private Timeline timeline;
 
+    private int hitPoint = 0;
+
+
+
     private Random rand = new Random();
 
     Monster(String path) {
@@ -20,10 +26,12 @@ public class Monster extends Entity {
         this.setX(rand.nextDouble(0, 1100));
         this.setY(rand.nextDouble(0, 300));
 
-        this.setCollidable(true);
-        this.getColliBox().setVisible(false);
+        this.hitPoint = 10;
         this.alive = true;
-        this.move(1200, 720);
+        this.setCollidable(true);
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        this.move(screenSize.getWidth(), screenSize.getHeight());
     }
 
     @Override
@@ -37,18 +45,24 @@ public class Monster extends Entity {
     }
 
     public void move(double Width, double Height) {
-        Timeline VelocityTimeline = new Timeline(new KeyFrame(Duration.millis(2000), e -> {
+        Timeline VelocityTimeline = new Timeline(new KeyFrame(Duration.millis(rand.nextDouble(2000, 7000)), e -> {
             this.newVelocity();
         }));
 
         timeline = new Timeline(new KeyFrame(Duration.millis(20), e -> {
             double nx = this.getX() + Vx;
             double ny = this.getY() + Vy;
-            if (0 <= nx && nx < Width) {
+            if (0 <= nx && nx + this.getWidth() < Width) {
                 this.setX(nx);
             }
-            if (0 <= ny && ny + this.getHeight() + 20 < Height) {
+            else {
+                Vx = -Vx;
+            }
+            if (0 <= ny && ny + this.getHeight() + 50 < Height) {
                 this.setY(ny);
+            }
+            else {
+                Vy = -Vy;
             }
         }));
 
@@ -63,5 +77,16 @@ public class Monster extends Entity {
         timeline.stop();
         alive = false;
         System.out.println("Chicken die!");
+    }
+
+    public void takeDamage(int dmg) {
+        hitPoint -= dmg;
+        if (hitPoint <= 0) {
+            alive = false;
+        }
+    }
+
+    public boolean isAlive() {
+        return alive;
     }
 }
