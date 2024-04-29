@@ -34,6 +34,14 @@ public class Monster extends Entity {
         this.move(screenSize.getWidth(), screenSize.getHeight());
     }
 
+    public void setHitPoint(int hitpoint) {
+        this.hitPoint = hitpoint;
+    }
+    
+    public int getHitPoint() {
+        return this.hitPoint;
+    }
+
     @Override
     public void draw(GraphicsContext gc) {
         gc.drawImage(this.getImage(), this.getX(), this.getY(), this.getWidth(), this.getHeight());
