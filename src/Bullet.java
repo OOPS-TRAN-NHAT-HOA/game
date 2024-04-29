@@ -1,11 +1,11 @@
 
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.util.Duration;
 
 public class Bullet extends Entity {
-    private int damage;
     private double Vx;
     private double Vy;
     private boolean moving;
@@ -14,16 +14,8 @@ public class Bullet extends Entity {
     Bullet(String path) {
         super(path);
         this.setCollidable(true);
-        this.moving = true;
-        this.damage = 1;
-    }
-
-    public void setDmg(int dmg) {
-        this.damage = dmg;
-    }
-
-    public int getDmg() {
-        return damage;
+        this.getColliBox().setVisible(false);
+        moving = true;
     }
     
     public void setSpeed(double vx, double vy) {
@@ -40,12 +32,12 @@ public class Bullet extends Entity {
             this.setX(this.getX() + Vx);
             this.setY(this.getY() + Vy);
         }));
-        timeline.setCycleCount(100);
+        timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
 
     public void stop(){
-        // System.out.println("bullet stop!");
+        System.out.println("bullet stop!");
         moving = false;
         timeline.stop();
     }

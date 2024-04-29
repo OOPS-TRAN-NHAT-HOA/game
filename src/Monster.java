@@ -1,6 +1,5 @@
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
+
 import java.util.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -11,26 +10,20 @@ public class Monster extends Entity {
 
     protected double Vx = 0;
     protected double Vy = 1;
-    private Random rand = new Random();
-
     protected boolean alive;
-    private int hitPoint = 0;
-
     private Timeline timeline;
 
+    private Random rand = new Random();
 
     Monster(String path) {
         super(path);
         this.setX(rand.nextDouble(0, 1100));
         this.setY(rand.nextDouble(0, 300));
 
-        this.alive = true;
-        this.hitPoint = 10;
         this.setCollidable(true);
-
-
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        this.move(screenSize.getWidth(), screenSize.getHeight());
+        this.getColliBox().setVisible(false);
+        this.alive = true;
+        this.move(1200, 720);
     }
 
     @Override
@@ -44,24 +37,18 @@ public class Monster extends Entity {
     }
 
     public void move(double Width, double Height) {
-        Timeline VelocityTimeline = new Timeline(new KeyFrame(Duration.millis(rand.nextDouble(2000, 7000)), e -> {
+        Timeline VelocityTimeline = new Timeline(new KeyFrame(Duration.millis(2000), e -> {
             this.newVelocity();
         }));
 
         timeline = new Timeline(new KeyFrame(Duration.millis(20), e -> {
             double nx = this.getX() + Vx;
             double ny = this.getY() + Vy;
-            if (0 <= nx && nx + this.getWidth() < Width) {
+            if (0 <= nx && nx < Width) {
                 this.setX(nx);
             }
-            else {
-                Vx = -Vx;
-            }
-            if (0 <= ny && ny + 3 * this.getHeight() < Height) {
+            if (0 <= ny && ny + this.getHeight() + 20 < Height) {
                 this.setY(ny);
-            }
-            else {
-                Vy = -Vy;
             }
         }));
 
@@ -72,14 +59,9 @@ public class Monster extends Entity {
         timeline.play();
     }
 
-    public void takeDamage(int dmg) {
-        hitPoint -= dmg;
-        if (hitPoint <= 0) {
-            alive = false;
-        }
-    }
-
-    public boolean isAlive() {
-        return alive;
+    public void stop(){
+        timeline.stop();
+        alive = false;
+        System.out.println("Chicken die!");
     }
 }

@@ -63,7 +63,6 @@ public class App extends Application {
 
         startButton.setOnAction(e-> {
             GamePane battle = new GamePane();
-            battle.getScene().setCursor(Cursor.NONE);
             stage.setScene(battle.getScene());
         });
 
