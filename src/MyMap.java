@@ -1,7 +1,4 @@
-
-
 import java.util.*;
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;

@@ -1,5 +1,3 @@
-
-
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.*;
@@ -7,6 +5,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.util.Duration;
+import javafx.scene.paint.Color;
 
 public class Monster extends Entity {
 
@@ -15,9 +14,7 @@ public class Monster extends Entity {
     protected boolean alive;
     private Timeline timeline;
 
-    private int hitPoint = 0;
-
-
+    private int hitPoint;
 
     private Random rand = new Random();
 
@@ -44,6 +41,13 @@ public class Monster extends Entity {
 
     @Override
     public void draw(GraphicsContext gc) {
+        //draw HP bar
+        gc.setFill(Color.WHITE);
+        gc.fillRect(this.getX()+20, this.getY()-20, this.getWidth()-40, 10);
+        gc.setFill(Color.RED);
+        double remainingHealth = (double) hitPoint/10;
+        gc.fillRect(this.getX()+20, this.getY()-20, (this.getWidth()-40)*remainingHealth, 10);
+
         gc.drawImage(this.getImage(), this.getX(), this.getY(), this.getWidth(), this.getHeight());
     }
 
