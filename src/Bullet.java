@@ -1,5 +1,3 @@
-
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
@@ -42,11 +40,11 @@ public class Bullet extends Entity {
             this.setY(this.getY() + Vy);
         }));
         timeline.setCycleCount(100);
+        timeline.setOnFinished(e -> stop());
         timeline.play();
     }
 
     public void stop(){
-        // System.out.println("bullet stop!");
         moving = false;
         timeline.stop();
     }

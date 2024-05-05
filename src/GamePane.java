@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.util.Iterator;
-
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
