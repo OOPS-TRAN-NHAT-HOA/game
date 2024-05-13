@@ -59,7 +59,7 @@ public class Sprite {
 	public void getCurrentSpriteNum( int spriteCounter){
 		if( spriteCounter == 0){
 			if(this.currentSpriteNum < this.totalSprite){
-				this.currentSpriteNum ++;
+				this.currentSpriteNum++;
 			}
 			else{
 				this.currentSpriteNum = 0;

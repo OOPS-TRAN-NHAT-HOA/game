@@ -15,4 +15,8 @@ public class CollisionHandler {
     public boolean checkCollision(Bullet bullet, Monster monster) {
         return checkCollision(bullet.getColliBox(), monster.getColliBox());
     }
+
+    public boolean checkCollision(Plane plane, DropItem dropItem) {
+        return checkCollision(plane.getColliBox(), dropItem.getColliBox());
+    }
 }

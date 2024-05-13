@@ -1,6 +1,6 @@
 import java.awt.*;
-import java.util.Iterator;
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -47,6 +47,8 @@ public class GamePane extends Pane {
         if (this.map.getMonsters().size() == 0 && this.plane.isAlive()) {
             this.map.spawn(this);
         }
+
+        // monster update
         for (Monster monster : this.map.getMonsters()) {
             if (collisionHandler.checkCollision(this.plane, monster)) {
                 this.plane.die();
@@ -58,24 +60,23 @@ public class GamePane extends Pane {
                 }
             }
         }
+
+        // dropItem update
+        for (DropItem dropItem : this.map.getDropItems()) {
+            if (collisionHandler.checkCollision(this.plane, dropItem)) {
+                dropItem.stop();
+                Platform.runLater(() -> { // the main thread will be block without this
+                    dropItem.itemEffect(this.plane);
+                });
+            }
+        }
     }
 
     private void draw(GraphicsContext gc){
         if(plane.isAlive()){
             gc.clearRect(0, 0, gameWidth, gameHeight);
-            map.draw(gc);
-            plane.draw(gc);
-            
-            Iterator<Monster> it = this.map.getMonsters().iterator();
-            while (it.hasNext()) {
-                Monster monster = it.next();
-                if (monster.isAlive()) {
-                    monster.draw(gc);
-                }
-                else {
-                    it.remove();
-                }
-            }
+            this.map.draw(gc);
+            this.plane.draw(gc);
         }
         else{
             gameOver();
@@ -83,9 +84,16 @@ public class GamePane extends Pane {
     }
 
     private void start() {
-        
         this.gameScene.setCursor(Cursor.NONE);
-        this.plane = new Plane(505, 550);
+        try {
+            Robot robot = new Robot();
+            robot.mouseMove(650, 550);
+        }
+        catch (AWTException e) {
+            e.printStackTrace();
+        }
+        
+        this.plane = new Plane(650, 550);
         this.map = new MyMap(0, 0);
 
         gameloop = new AnimationTimer(){

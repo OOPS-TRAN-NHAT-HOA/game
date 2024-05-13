@@ -1,4 +1,3 @@
-
 import javafx.application.Application;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
@@ -13,10 +12,6 @@ public class App extends Application {
     private double screenWidth;
     private double screenHeight;
 
-    public static void main(String[] args) throws Exception {
-        Application.launch(args);
-    }
-
     @Override
     public void start(Stage stage) {
         // get your screenSize
@@ -28,15 +23,17 @@ public class App extends Application {
         Image icon = new Image("file:images/chicken.png");
         stage.getIcons().add(icon);
 
-        //Main menu
+        //Main menu -------------------------------------------------------------------------------------------
         Pane menuPane = new Pane();
-        ImageView bg = new ImageView("file:images/space.png");
-        bg.setFitWidth(screenWidth);
         Scene menuScene = new Scene(menuPane, screenWidth, screenHeight);
+
+        // background
+        ImageView background = new ImageView("file:images/space.png");
+        background.setFitWidth(screenWidth);
 
         // title
         ImageView title = new ImageView("file:images/title.png");
-        title.setX(308);
+        title.setX(283);
         title.setY(30);        
 
         // exit button
@@ -49,30 +46,67 @@ public class App extends Application {
         exitButton.setStyle("-fx-background-color: Transparent");
         exitButton.setCursor(Cursor.HAND);
 
-        exitButton.setOnAction(e-> stage.close());
-
         // start button
         Button startButton = new Button();
         ImageView start = new ImageView("file:images/start.png");
-        startButton.setTranslateX(940);
+        startButton.setTranslateX(930);
         startButton.setTranslateY(630);
         startButton.setPrefSize(start.getFitWidth(), start.getFitHeight());
         startButton.setGraphic(start);
         startButton.setStyle("-fx-background-color: Transparent");
         startButton.setCursor(Cursor.HAND);
 
+        menuPane.getChildren().addAll(background, title, exitButton, startButton);
+        // ----------------------------------------------------------------------------------------------------
+        
+        // Secondy menu -------------------------------------------------------------------------------------
+        ImageView background2 = new ImageView("file:images/space.png");
+        background2.setFitWidth(screenWidth);
+
+        Pane secondMenuPane = new Pane();
+        Button continueButton = new Button("Continue");
+        continueButton.setTranslateX(500);
+        continueButton.setTranslateY(100);
+
+        Button newGameButton = new Button("New game");
+        newGameButton.setTranslateX(500);
+        newGameButton.setTranslateY(200);
+
+        Button backButton = new Button("Back");
+        backButton.setTranslateX(500);
+        backButton.setTranslateY(300);
+        secondMenuPane.getChildren().addAll(background2, continueButton, newGameButton, backButton);
+
+        Scene secondScene = new Scene(secondMenuPane, screenWidth, screenHeight);
+
+
+
+
+        // ----------------------------------------------------------------------------------------------------
+        exitButton.setOnAction(e-> stage.close());
         startButton.setOnAction(e-> {
+            stage.setScene(secondScene);
+        });
+
+        continueButton.setOnAction(e-> {
             GamePane battle = new GamePane();
             stage.setScene(battle.getScene());
         });
-
-        menuPane.getChildren().addAll(bg,title,exitButton,startButton);
+        newGameButton.setOnAction(e -> {
+            GamePane battle = new GamePane();
+            stage.setScene(battle.getScene());
+        });
+        backButton.setOnAction(e -> stage.setScene(menuScene));
 
         //stage
-        stage.setScene(menuScene);
         stage.setTitle("Chicken Invaders");
+        stage.setScene(menuScene);
         stage.setFullScreen(false);
         // stage.setFullScreenExitKeyCombination(KeyCombination.valueOf("Esc"));
         stage.show();
+    }
+
+    public static void main(String[] args) throws Exception {
+        Application.launch(args);
     }
 }

@@ -41,6 +41,9 @@ public class Monster extends Entity {
 
     @Override
     public void draw(GraphicsContext gc) {
+        //debug the colliBox
+        // gc.fillRect(this.getColliBox().getX(), this.getColliBox().getY(), this.getColliBox().getWidth(), this.getColliBox().getHeight());
+
         //draw HP bar
         gc.setFill(Color.WHITE);
         gc.fillRect(this.getX()+20, this.getY()-20, this.getWidth()-40, 10);
@@ -89,6 +92,18 @@ public class Monster extends Entity {
         timeline.stop();
         alive = false;
         System.out.println("Chicken die!");
+    }
+
+    public DropItem dropSomething() {
+        double p = rand.nextDouble(0, 1);
+        // System.out.println(p);
+        if (p < 0.1) { // 10% for heart
+            return new DropItem(DropItem.Items.HEART, this.getX(), this.getY());
+        }
+        else if (p < 0.2) { // 10% for bullet
+            return new DropItem(DropItem.Items.UPGRADGEBULLETS, this.getX(), this.getY());
+        }
+        return null;
     }
 
     public void takeDamage(int dmg) {
