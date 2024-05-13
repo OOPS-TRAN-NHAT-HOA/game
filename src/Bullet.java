@@ -14,7 +14,7 @@ public class Bullet extends Entity {
     Bullet(String path) {
         super(path);
         this.setCollidable(true);
-        this.getColliBox().setVisible(false);
+        // this.getColliBox().setVisible(false);
         this.moving = true;
         this.damage = 1;
     }

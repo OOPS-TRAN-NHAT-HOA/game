@@ -1,4 +1,8 @@
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -11,6 +15,7 @@ import javafx.stage.Stage;
 import javafx.scene.Cursor;
 
 public class GamePane extends Pane {
+    private Scene menuScene;
 
     private final int fps = 60;
     private double gameWidth;
@@ -19,19 +24,20 @@ public class GamePane extends Pane {
     private MyMap map;
     private Plane plane;
     private CollisionHandler collisionHandler;
+    private List<ExplosionAnimation> explosion = new ArrayList<>();
 
     public Canvas canvas;
     public GraphicsContext gc;
     public Scene gameScene;
     private AnimationTimer gameloop;
     
-    GamePane() {
+    GamePane(Scene menu) {
+        this.menuScene = menu;
+
         // get your screenSize
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         gameWidth = screenSize.getWidth();
         gameHeight = screenSize.getHeight();
-
-        this.collisionHandler = new CollisionHandler();
 
         // setup
         this.canvas = new Canvas(gameWidth, gameHeight);
@@ -39,6 +45,7 @@ public class GamePane extends Pane {
         this.gameScene = new Scene(this);
         this.getChildren().add(canvas);
         
+        this.collisionHandler = new CollisionHandler();
         this.start();
     }
 
@@ -56,6 +63,7 @@ public class GamePane extends Pane {
             for (Bullet bullet : this.plane.getBullets()) {
                 if (collisionHandler.checkCollision(bullet, monster)) {
                     monster.takeDamage(bullet.getDamage());
+                    explosion.add(new ExplosionAnimation(bullet.getX() - 30, bullet.getY() - 25));
                     bullet.stop();
                 }
             }
@@ -70,6 +78,15 @@ public class GamePane extends Pane {
                 });
             }
         }
+
+        // explosion
+        Iterator<ExplosionAnimation> it = explosion.iterator();
+        while (it.hasNext()) {
+            ExplosionAnimation ex = it.next();
+            if (ex.isStop()) {
+                it.remove();
+            }
+        }
     }
 
     private void draw(GraphicsContext gc){
@@ -77,6 +94,9 @@ public class GamePane extends Pane {
             gc.clearRect(0, 0, gameWidth, gameHeight);
             this.map.draw(gc);
             this.plane.draw(gc);
+            for (ExplosionAnimation ex : explosion) {
+                ex.draw(gc);
+            }
         }
         else{
             gameOver();
@@ -132,7 +152,7 @@ public class GamePane extends Pane {
         exitButton.setCursor(Cursor.HAND);
         exitButton.setOnAction(e-> {
             Stage stage = (Stage) this.gameScene.getWindow();
-            stage.close();
+            stage.setScene(menuScene);
         });
 
         // restart button

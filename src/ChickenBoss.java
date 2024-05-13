@@ -1,8 +1,15 @@
-public class ChickenBoss extends Monster {
+import javafx.scene.canvas.GraphicsContext;
 
-    ChickenBoss(String path) {
-        super(path);
+public class ChickenBoss extends Entity {
+
+    ChickenBoss() {
+        super("file:images/Invader/chicken1.1.png");
         //TODO Auto-generated constructor stub
+    }
+
+    @Override
+    public void draw(GraphicsContext gc) {
+        // TODO Auto-generated method stub
     }
     
 }

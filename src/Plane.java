@@ -114,7 +114,7 @@ public class Plane extends Entity {
 
     // plane attack
     private void shoot() {
-        Bullet bullet = new Bullet("file:images/Bullets/shot.png");
+        Bullet bullet = new Bullet("file:images/Bullets/bullet1.png");
         bullet.setSpeed(0, -10);
         bullet.setX(this.getX() + this.getWidth() / 2 - bullet.getWidth() / 2);
         bullet.setY(this.getY());
@@ -138,7 +138,7 @@ public class Plane extends Entity {
         }
     }
 
-    // invisible 
+    // invisible for five second
     public void invisible() {
         this.setCollidable(false);
         Timeline invisible = new Timeline(new KeyFrame(Duration.seconds(5), e -> {

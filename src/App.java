@@ -91,11 +91,11 @@ public class App extends Application {
         });
 
         continueButton.setOnAction(e-> {
-            GamePane battle = new GamePane();
+            GamePane battle = new GamePane(secondScene);
             stage.setScene(battle.getScene());
         });
         newGameButton.setOnAction(e -> {
-            GamePane battle = new GamePane();
+            GamePane battle = new GamePane(secondScene);
             stage.setScene(battle.getScene());
         });
         backButton.setOnAction(e -> stage.setScene(menuScene));
