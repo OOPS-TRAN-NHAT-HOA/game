@@ -20,7 +20,7 @@ public class App extends Application {
         screenHeight = screenSize.getHeight();
 
         // icon
-        Image icon = new Image("file:images/chicken.png");
+        Image icon = new Image("file:images/Invader/chicken.png");
         stage.getIcons().add(icon);
 
         //Main menu -------------------------------------------------------------------------------------------

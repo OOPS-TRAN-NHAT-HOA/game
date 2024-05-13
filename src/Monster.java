@@ -41,7 +41,7 @@ public class Monster extends Entity {
 
     @Override
     public void draw(GraphicsContext gc) {
-        //debug the colliBox
+        // debug the colliBox
         // gc.fillRect(this.getColliBox().getX(), this.getColliBox().getY(), this.getColliBox().getWidth(), this.getColliBox().getHeight());
 
         //draw HP bar

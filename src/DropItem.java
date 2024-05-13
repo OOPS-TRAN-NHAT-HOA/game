@@ -63,7 +63,7 @@ public class DropItem extends Entity {
                 // TODO
                 break;
             case Items.UPGRADGEBULLETS:
-                // TODO
+                plane.bulletLevel = Math.min(plane.bulletLevel + 1, 3);
                 break;
         }
         System.out.println("Effected!!!");

@@ -15,11 +15,13 @@ public class Plane extends Entity {
     protected boolean alive;
     private Timeline shootingTimeline;
     private List<Bullet> planeBullets;
+    protected int bulletLevel = 3;
     private final double xOffset = 65, yOffset = 45;//offset of the colliBox from the Image
     private Sprite movingPlane, shootingPlane, currentSprite;
     private final int framePerSprite = 6;
     private int spriteCounter = 0;
     private PlaneState state;
+    
 
     Plane(int x, int y) {
         this.invisible();
@@ -116,10 +118,30 @@ public class Plane extends Entity {
     private void shoot() {
         Bullet bullet = new Bullet("file:images/Bullets/bullet1.png");
         bullet.setSpeed(0, -10);
-        bullet.setX(this.getX() + this.getWidth() / 2 - bullet.getWidth() / 2);
-        bullet.setY(this.getY());
-        planeBullets.add(bullet);
-        bullet.move();
+        double x = this.getX() + this.getWidth() / 2 - bullet.getWidth() / 2;
+        double y = this.getY();
+        bullet.setX(x);
+        bullet.setY(y);
+        switch (bulletLevel) {
+            case 1:
+                planeBullets.add(bullet.clone());
+                break;
+            case 2:
+                bullet.setX(x - 10);
+                planeBullets.add(bullet.clone());
+                bullet.setX(x + 10);
+                planeBullets.add(bullet.clone());
+                break;
+            case 3:
+                bullet.setX(x - 20);
+                planeBullets.add(bullet.clone());
+                bullet.setX(x + 20);
+                planeBullets.add(bullet.clone());
+                bullet.setX(x);
+                bullet.setY(y - 10);
+                planeBullets.add(bullet.clone());
+                break;
+        }
     }
 
     private void startShooting() {

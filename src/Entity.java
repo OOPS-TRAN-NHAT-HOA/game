@@ -25,6 +25,11 @@ abstract public class Entity {
         this.setY(y);
     }
 
+    public void setImage(Image img) {
+        this.image = img;
+        this.setColliBox(this.xPos, this.yPos, this.getWidth(), this.getHeight());
+    }
+
     public Image getImage() {
         return this.image;
     }

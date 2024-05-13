@@ -10,6 +10,11 @@ public class Bullet extends Entity {
     private Timeline timeline;
     private int damage;
         
+    Bullet() {
+        this.setCollidable(true);
+        this.moving = true;
+        this.damage = 1;
+    }
 
     Bullet(String path) {
         super(path);
@@ -32,7 +37,7 @@ public class Bullet extends Entity {
     
     public void draw(GraphicsContext gc) {
         //debug the colliBox
-        // gc.fillRect(this.getColliBox().getX(), this.getColliBox().getY(), this.getColliBox().getWidth(), this.getColliBox().getHeight());
+        gc.fillRect(this.getColliBox().getX(), this.getColliBox().getY(), this.getColliBox().getWidth(), this.getColliBox().getHeight());
 
         gc.drawImage(this.getImage(), this.xPos, this.yPos, this.getWidth(), this.getHeight());
     }
@@ -42,7 +47,7 @@ public class Bullet extends Entity {
             this.setX(this.getX() + Vx);
             this.setY(this.getY() + Vy);
         }));
-        timeline.setCycleCount(100);
+        timeline.setCycleCount(75);
         timeline.setOnFinished(e -> stop());
         timeline.play();
     }
@@ -54,5 +59,16 @@ public class Bullet extends Entity {
 
     public boolean isStop() {
         return !moving;
+    }
+
+    public Bullet clone() {
+        Bullet cloneBullet = new Bullet();
+        cloneBullet.setImage(this.getImage());
+        cloneBullet.setSpeed(this.Vx, this.Vy);
+        cloneBullet.setX(this.getX());
+        cloneBullet.setY(this.getY());
+
+        cloneBullet.move();
+        return cloneBullet;
     }
 }

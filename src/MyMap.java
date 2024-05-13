@@ -11,7 +11,7 @@ public class MyMap extends Entity {
 	private Random rand = new Random();
 	
 	public MyMap(double x, double y){
-		setImage("file:images/Space/space.png", x, y);
+		this.setImage("file:images/Space/space.png", x, y);
 		this.monsters = new ArrayList<>();
 		this.dropItems = new ArrayList<>();
 		this.move();

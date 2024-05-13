@@ -20,7 +20,7 @@ public class CollisionHandler {
 
     // plane - drop item
     public boolean checkCollision(Plane plane, DropItem dropItem) {
-        return plane.isCollidable && checkCollision(plane.getColliBox(), dropItem.getColliBox());
+        return checkCollision(plane.getColliBox(), dropItem.getColliBox());
     }
 
     // plane - Egg
