@@ -30,7 +30,7 @@ public class Sprite {
 
 		//các sprite xếp theo hàng ngang
 		int x = 0;
-		int index = 0;
+		// int index = 0;
 		BufferedImage bufferedImageTemp = null;
 		if(this.spriteSheet != null) {
 			int tileSize = spriteSheet.getHeight();
