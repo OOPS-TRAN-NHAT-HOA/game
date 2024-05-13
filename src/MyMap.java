@@ -5,6 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.util.Duration;
 
 public class MyMap extends Entity {
+	// TODO: làm 3 phase, mỗi phase ra một loại quái mới, phase cuối có con boss
 
     private List<Monster> monsters;
 	private List<DropItem> dropItems;

@@ -37,7 +37,7 @@ public class Bullet extends Entity {
     
     public void draw(GraphicsContext gc) {
         //debug the colliBox
-        gc.fillRect(this.getColliBox().getX(), this.getColliBox().getY(), this.getColliBox().getWidth(), this.getColliBox().getHeight());
+        // gc.fillRect(this.getColliBox().getX(), this.getColliBox().getY(), this.getColliBox().getWidth(), this.getColliBox().getHeight());
 
         gc.drawImage(this.getImage(), this.xPos, this.yPos, this.getWidth(), this.getHeight());
     }
