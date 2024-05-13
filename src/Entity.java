@@ -8,19 +8,21 @@ abstract public class Entity {
     protected Rectangle collisionBox;
     
     protected Image image;
-    protected double xPos,yPos;
+    protected double xPos = -1000, yPos = -1000;
 
     Entity() {}
     
     Entity(String path) {
         this.image = new Image(path);
+        this.setColliBox(this.xPos, this.yPos, this.getWidth(), this.getHeight());
     }
 
     //setImage 
     public void setImage(String path, double x, double y) {
         this.image = new Image(path);
-        setX(x);
-        setY(y);
+        this.setColliBox(this.xPos, this.yPos, this.getWidth(), this.getHeight());
+        this.setX(x);
+        this.setY(y);
     }
 
     public Image getImage() {
@@ -46,23 +48,16 @@ abstract public class Entity {
     
     public void setX(double x) {
         this.xPos = x;
-        if (isCollidable) {
-            this.getColliBox().setX(x);
-        }
+        this.getColliBox().setX(x);
     }
     
     public void setY(double y) {
         this.yPos = y;
-        if (isCollidable) {
-            this.getColliBox().setY(y);
-        }
+        this.getColliBox().setY(y);
     }
 
     public void setCollidable(boolean tmp){
     	isCollidable = tmp;
-        if (tmp && this.image != null) { // default (colliBox = imageSize)
-            this.setColliBox(xPos, yPos, this.getWidth(), this.getHeight());
-        }
     }
 
     public void setColliBox(double x, double y, double width, double height){

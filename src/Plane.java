@@ -22,7 +22,7 @@ public class Plane extends Entity {
     private PlaneState state;
 
     Plane(int x, int y) {
-        this.setCollidable(true);
+        this.invisible();
         this.alive = true;
         this.planeBullets = new ArrayList<>();
         this.state = PlaneState.MOVING;
@@ -136,5 +136,17 @@ public class Plane extends Entity {
         if (shootingTimeline != null) {
             shootingTimeline.stop();
         }
+    }
+
+    // invisible 
+    public void invisible() {
+        this.setCollidable(false);
+        Timeline invisible = new Timeline(new KeyFrame(Duration.seconds(5), e -> {
+        }));
+        invisible.setCycleCount(1);
+        invisible.setOnFinished(e -> {
+            this.setCollidable(true);
+        });
+        invisible.play();
     }
 }

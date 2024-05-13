@@ -10,7 +10,7 @@ public class CollisionHandler {
 
     // plane - monster
     public boolean checkCollision(Plane plane, Monster monster) {
-        return checkCollision(plane.getColliBox(), monster.getColliBox());
+        return plane.isCollidable && checkCollision(plane.getColliBox(), monster.getColliBox());
     }
 
     // bullet - monster
@@ -20,11 +20,11 @@ public class CollisionHandler {
 
     // plane - drop item
     public boolean checkCollision(Plane plane, DropItem dropItem) {
-        return checkCollision(plane.getColliBox(), dropItem.getColliBox());
+        return plane.isCollidable && checkCollision(plane.getColliBox(), dropItem.getColliBox());
     }
 
     // plane - Egg
     public boolean checkCollision(Plane plane, Egg egg) {
-        return checkCollision(plane.getColliBox(), egg.getColliBox());
+        return plane.isCollidable && checkCollision(plane.getColliBox(), egg.getColliBox());
     }
 }

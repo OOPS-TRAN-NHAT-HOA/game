@@ -63,11 +63,7 @@ public class App extends Application {
         ImageView background2 = new ImageView("file:images/Space/space.png");
         background2.setFitWidth(screenWidth);
 
-        Pane secondMenuPane = new Pane();
-        Button continueButton = new Button("Continue");
-        continueButton.setTranslateX(500);
-        continueButton.setTranslateY(100);
-
+        Pane secondMenuPane = new Pane(); Button continueButton = new Button("Continue"); continueButton.setTranslateX(500); continueButton.setTranslateY(100);
         Button newGameButton = new Button("New game");
         newGameButton.setTranslateX(500);
         newGameButton.setTranslateY(200);
@@ -85,7 +81,7 @@ public class App extends Application {
         // ----------------------------------------------------------------------------------------------------
         
         // thirdMenu-------------------------------------------------------------------------------------------
-        // chỗ nãy để chọn máy bay nhưng chưa làm gì cả
+        // TODO: chỗ nãy để chọn máy bay nhưng chưa làm gì cả
         // ----------------------------------------------------------------------------------------------------
 
         

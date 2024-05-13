@@ -60,10 +60,10 @@ public class DropItem extends Entity {
     public void itemEffect(Plane plane) {
         switch (this.Item) {
             case Items.HEART:
-                // todo
+                // TODO
                 break;
             case Items.UPGRADGEBULLETS:
-                // todo
+                // TODO
                 break;
         }
         System.out.println("Effected!!!");

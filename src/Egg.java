@@ -25,7 +25,7 @@ public class Egg extends Entity {
     }
 
     private Monster hatching() {
-        // todo
+        // TODO
         return null;
     }
 
