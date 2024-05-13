@@ -39,10 +39,10 @@ public class DropItem extends Entity {
     }
 
     private void drop() {
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(100), e-> {
-            this.setY(this.getY() + 1);
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(25), e-> {
+            this.setY(this.getY() + 1.5);
         }));
-        timeline.setCycleCount(100);
+        timeline.setCycleCount(200);
         timeline.setOnFinished(e -> {
             this.moving = false;
         });
@@ -60,8 +60,10 @@ public class DropItem extends Entity {
     public void itemEffect(Plane plane) {
         switch (this.Item) {
             case Items.HEART:
+                // todo
                 break;
             case Items.UPGRADGEBULLETS:
+                // todo
                 break;
         }
         System.out.println("Effected!!!");

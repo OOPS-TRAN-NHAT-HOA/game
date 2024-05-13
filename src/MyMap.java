@@ -11,7 +11,7 @@ public class MyMap extends Entity {
 	private Random rand = new Random();
 	
 	public MyMap(double x, double y){
-		setImage("file:images/space.png", x, y);
+		setImage("file:images/Space/space.png", x, y);
 		this.monsters = new ArrayList<>();
 		this.dropItems = new ArrayList<>();
 		this.move();
@@ -49,7 +49,7 @@ public class MyMap extends Entity {
 
 	public void spawn(GamePane gamePane) {
 		for (int i = 0; i < rand.nextInt(1, 10); i++) {
-			Monster monster = new Monster("file:images/chicken.png");
+			Monster monster = new Monster("file:images/Invader/chicken.png");
 			this.monsters.add(monster);
 		}
 	}

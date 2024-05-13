@@ -28,7 +28,7 @@ public class App extends Application {
         Scene menuScene = new Scene(menuPane, screenWidth, screenHeight);
 
         // background
-        ImageView background = new ImageView("file:images/space.png");
+        ImageView background = new ImageView("file:images/Space/space.png");
         background.setFitWidth(screenWidth);
 
         // title
@@ -60,7 +60,7 @@ public class App extends Application {
         // ----------------------------------------------------------------------------------------------------
         
         // Secondy menu -------------------------------------------------------------------------------------
-        ImageView background2 = new ImageView("file:images/space.png");
+        ImageView background2 = new ImageView("file:images/Space/space.png");
         background2.setFitWidth(screenWidth);
 
         Pane secondMenuPane = new Pane();

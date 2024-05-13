@@ -22,13 +22,12 @@ public class Plane extends Entity {
     private PlaneState state;
 
     Plane(int x, int y) {
-        this.setImage("file:images/plane.png", x, y);
         this.setCollidable(true);
         this.alive = true;
         this.planeBullets = new ArrayList<>();
         this.state = PlaneState.MOVING;
-        movingPlane = new Sprite("images/MovingPlane.png");
-        shootingPlane = new Sprite("images/ShootingPlane.png");
+        movingPlane = new Sprite("images/SpacePlane/MovingPlane.png");
+        shootingPlane = new Sprite("images/SpacePlane/ShootingPlane.png");
     }
 
 
@@ -115,7 +114,7 @@ public class Plane extends Entity {
 
     // plane attack
     private void shoot() {
-        Bullet bullet = new Bullet("file:images/shot.png");
+        Bullet bullet = new Bullet("file:images/Bullets/shot.png");
         bullet.setSpeed(0, -10);
         bullet.setX(this.getX() + this.getWidth() / 2 - bullet.getWidth() / 2);
         bullet.setY(this.getY());

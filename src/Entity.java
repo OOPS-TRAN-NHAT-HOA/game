@@ -60,7 +60,7 @@ abstract public class Entity {
 
     public void setCollidable(boolean tmp){
     	isCollidable = tmp;
-        if (tmp) {
+        if (tmp && this.image != null) { // default (colliBox = imageSize)
             this.setColliBox(xPos, yPos, this.getWidth(), this.getHeight());
         }
     }
