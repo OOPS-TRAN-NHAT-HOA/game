@@ -1,3 +1,4 @@
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
@@ -9,19 +10,19 @@ public class Bullet extends Entity {
     private boolean moving;
     private Timeline timeline;
     private int damage;
-        
+    private final double xOffset = 7, yOffset = 2;//offset of the colliBox from the Image
+
     Bullet() {
         this.setCollidable(true);
         this.moving = true;
-        this.damage = 1;
+        this.damage = 100;
     }
 
     Bullet(String path) {
         super(path);
         this.setCollidable(true);
-        // this.getColliBox().setVisible(false);
         this.moving = true;
-        this.damage = 1;
+        this.damage = 100;
     }
     public void setDamage(int dmg) {
         this.damage = dmg;
@@ -46,6 +47,7 @@ public class Bullet extends Entity {
         timeline = new Timeline(new KeyFrame(Duration.millis(20), e -> {
             this.setX(this.getX() + Vx);
             this.setY(this.getY() + Vy);
+            this.setColliBox(this.getX()+xOffset, this.getY()+yOffset, this.getWidth()-2*xOffset, this.getHeight()-2*yOffset);  
         }));
         timeline.setCycleCount(75);
         timeline.setOnFinished(e -> stop());

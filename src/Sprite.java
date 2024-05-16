@@ -10,18 +10,21 @@ import java.awt.Graphics2D;
 public class Sprite {
 
 	private int currentSpriteNum = 0;
-	private int totalSprite;
+	private int totalSprite = 0;
 
 	private BufferedImage spriteSheet;
 	private ArrayList<Image> spriteArrayList = new ArrayList<Image>();
 	
-
-	private void addSprite(Image newSprite){
+	public void addSprite(Image newSprite){
 		spriteArrayList.add(newSprite);
 		totalSprite = spriteArrayList.size() - 1;
 	}
 
-	public Sprite(String path){
+	Sprite(){
+		
+	}
+	//use for sprite in square shape
+	Sprite(String path){
 		try{
 
 			this.spriteSheet = ImageIO.read(new File(path));
@@ -56,7 +59,7 @@ public class Sprite {
 	    return rotated;
 	}
 
-	public void getCurrentSpriteNum( int spriteCounter){
+	public void setCurrentSpriteNum( int spriteCounter){
 		if( spriteCounter == 0){
 			if(this.currentSpriteNum < this.totalSprite){
 				this.currentSpriteNum++;
@@ -72,5 +75,13 @@ public class Sprite {
 			return this.spriteArrayList.get(currentSpriteNum);
 		}
 		return null;
+	}
+
+	public int getCurrentSpriteNum(){
+		return this.currentSpriteNum;
+	}
+
+	public int getTotalSprite(){
+		return this.totalSprite;
 	}
 }

@@ -11,6 +11,7 @@ public class DropItem extends Entity {
     }
     private Items Item;
     private boolean moving;
+    private final double xOffset = 5, yOffset = 5;//offset of the colliBox from the Image
 
     DropItem(Items name, double x, double y) {
         switch (name) {
@@ -41,6 +42,7 @@ public class DropItem extends Entity {
     private void drop() {
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(25), e-> {
             this.setY(this.getY() + 1.5);
+             this.setColliBox(this.getX()+xOffset, this.getY()+yOffset, this.getWidth()-2*xOffset, this.getHeight()-2*yOffset);
         }));
         timeline.setCycleCount(200);
         timeline.setOnFinished(e -> {
