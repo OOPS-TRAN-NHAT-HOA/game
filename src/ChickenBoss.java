@@ -1,9 +1,10 @@
-
+package mySrc;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
+import java.util.*;
 public class ChickenBoss extends Entity {
     enum BossState{
         SPAWN,
@@ -19,10 +20,15 @@ public class ChickenBoss extends Entity {
     private double aX = 0, aY = 0;
     private double spawnXPos, spawnYPos;
     private BossState currentState;
-    public ChickenBoss(){
+
+    private Random rand = new Random();
+
+    public ChickenBoss(double x, double y){
         this.setCollidable(true);
-        this.setX(300);
-        this.setY(300);
+        this.setX(rand.nextInt(0,1000));
+        this.setY(-getX());
+        this.spawnXPos=x;
+        this.spawnYPos=y;
         this.currentState = BossState.SPAWN;
         for(int i=1;i<=8;i++){
             if(i<=5){
@@ -32,14 +38,15 @@ public class ChickenBoss extends Entity {
                 chickenBossSprite.addSprite(new Image("file:images/chickenboss/chickenboss5.png"));
             }
         }
+        this.image = chickenBossSprite.getCurrentSprite();
     }
 
     public void update(){
-        // switch(currentState){
-        // case BossState.SPAWN:
-        //     spawn(spawnXPos, spawnYPos);
-        //     break;
-        // }
+        switch(currentState){
+        case BossState.SPAWN:
+            spawn(spawnXPos, spawnYPos);
+            break;
+        }
         //spriteCounter becomes 0 after each time it reachs framePerSprite
         this.spriteCounter++;
         if( this.spriteCounter > framePerSprite){
@@ -58,23 +65,32 @@ public class ChickenBoss extends Entity {
         gc.drawImage(this.getImage(), this.getX(), this.getY(), this.getWidth(), this.getHeight());
     }
     
-    // public void spawn(double XPos,double YPos){
-    //     if(this.getX() == XPos && this.getY() == YPos){
-    //         this.currentState = BossState.MOVING;
-    //     }
-    //     else{
-    //         aX = 0; 
-    //         aY = 0;
-    //         if(this.getX() > XPos)
-    //             aX = -2;
-    //         if(this.getX() < XPos)
-    //             aX = 2;
-    //         if(this.getY() > YPos)
-    //             aX = -2;
-    //         if(this.getY() < YPos)
-    //             aX = 2;
-    //         this.setX(this.getX()+aX);
-    //         this.setY(this.getY()+aY);
-    //     }
-    // }
+    public void spawn(double XPos,double YPos){
+        if(this.getX() == XPos && this.getY() == YPos){
+            this.currentState = BossState.MOVING;
+        }
+        else{
+            moveTo(XPos,YPos);
+        }
+    }
+
+    private void moveTo(double XPos, double YPos){
+        double aX = aY = 0.0;
+        if(this.getX()<XPos){
+            aX=1.0;
+        }
+        if(this.getX()>XPos){
+            aX=-1.0;
+        }
+        if(this.getY()<YPos){
+            aY=1.0;
+        }
+        if(this.getY()>YPos){
+            aY=-1.0;
+        }
+        double coorX = this.getX()+aX, coorY = this.getY()+aY;
+        this.setX(coorX);
+        this.setY(coorY);
+        System.out.println(coorX+"/"+coorY);
+    }
 }

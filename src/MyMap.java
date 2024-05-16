@@ -1,3 +1,4 @@
+
 import java.util.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -23,7 +24,7 @@ public class MyMap extends Entity {
 		this.monsters = new ArrayList<>();
 		this.dropItems = new ArrayList<>();
 		this.move();
-		boss = new ChickenBoss();
+		boss = new ChickenBoss(300.0,300.0);
 		currentWave = 0;
 	}
 
