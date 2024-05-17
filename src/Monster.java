@@ -13,17 +13,21 @@ public class Monster extends Entity {
     protected double Vy = 1;
     protected boolean alive;
     private Timeline timeline;
+    private final double xOffset = 10, yOffset = 5;//offset of the colliBox from the Image
 
-    private int hitPoint;
+    private int currentHitPoint, totalHitPoint;
 
     private Random rand = new Random();
 
-    Monster(String path) {
+    Monster(){}
+
+    Monster(String path, int totalHP) {
         super(path);
         this.setX(rand.nextDouble(0, 1100));
         this.setY(rand.nextDouble(0, 300));
 
-        this.hitPoint = 10;
+        this.totalHitPoint = totalHP;
+        this.currentHitPoint = totalHP;
         this.alive = true;
         this.setCollidable(true);
 
@@ -31,28 +35,23 @@ public class Monster extends Entity {
         this.move(screenSize.getWidth(), screenSize.getHeight());
     }
 
-    public void setHitPoint(int hitpoint) {
-        this.hitPoint = hitpoint;
-    }
-    
-    public int getHitPoint() {
-        return this.hitPoint;
-    }
-
     @Override
     public void draw(GraphicsContext gc) {
-        // debug the colliBox
+        // debug the colliBox  
         // gc.fillRect(this.getColliBox().getX(), this.getColliBox().getY(), this.getColliBox().getWidth(), this.getColliBox().getHeight());
 
         //draw HP bar
         gc.setFill(Color.WHITE);
         gc.fillRect(this.getX()+20, this.getY()-20, this.getWidth()-40, 10);
         gc.setFill(Color.RED);
-        double remainingHealth = (double) hitPoint/10;
+        double remainingHealth = (double) currentHitPoint/totalHitPoint;
         gc.fillRect(this.getX()+20, this.getY()-20, (this.getWidth()-40)*remainingHealth, 10);
-
         gc.drawImage(this.getImage(), this.getX(), this.getY(), this.getWidth(), this.getHeight());
     }
+
+    // public void update(){
+    //     this.setColliBox(this.getX()+xOffset, this.getY()+yOffset, this.getWidth()-2*xOffset, this.getHeight()-2*yOffset);  
+    // }
 
     public void newVelocity() {
         Vx = rand.nextDouble(-3, 3);
@@ -79,6 +78,7 @@ public class Monster extends Entity {
             else {
                 Vy = -Vy;
             }
+            this.setColliBox(this.getX()+xOffset, this.getY()+yOffset, this.getWidth()-2*xOffset, this.getHeight()-2*yOffset);  
         }));
 
         VelocityTimeline.setCycleCount(Timeline.INDEFINITE);
@@ -107,8 +107,8 @@ public class Monster extends Entity {
     }
 
     public void takeDamage(int dmg) {
-        hitPoint -= dmg;
-        if (hitPoint <= 0) {
+        currentHitPoint -= dmg;
+        if (currentHitPoint <= 0) {
             alive = false;
         }
     }

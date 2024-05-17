@@ -8,7 +8,7 @@ abstract public class Entity {
     protected Rectangle collisionBox;
     
     protected Image image;
-    protected double xPos = -1000, yPos = -1000;
+    protected double xPos , yPos;
 
     Entity() {}
     
@@ -53,16 +53,17 @@ abstract public class Entity {
     
     public void setX(double x) {
         this.xPos = x;
-        this.getColliBox().setX(x);
     }
     
     public void setY(double y) {
         this.yPos = y;
-        this.getColliBox().setY(y);
     }
 
     public void setCollidable(boolean tmp){
     	isCollidable = tmp;
+        if(tmp){
+            setColliBox(0,0,0,0);
+        }
     }
 
     public void setColliBox(double x, double y, double width, double height){

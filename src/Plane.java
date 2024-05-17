@@ -2,12 +2,14 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
+import javafx.scene.Parent;
 import javafx.util.Duration;
 import java.util.*; 
 
 enum PlaneState{
     MOVING,
-    SHOOTING
+    SHOOTING,
+    EXPLODING
 }
 
 public class Plane extends Entity {
@@ -17,7 +19,7 @@ public class Plane extends Entity {
     private List<Bullet> planeBullets;
     protected int bulletLevel = 1;
     private final double xOffset = 65, yOffset = 45;//offset of the colliBox from the Image
-    private Sprite movingPlane, shootingPlane, currentSprite;
+    private Sprite currentSprite, movingPlane, shootingPlane, explodingPlane;
     private final int framePerSprite = 6;
     private int spriteCounter = 0;
     private PlaneState state;
@@ -30,28 +32,11 @@ public class Plane extends Entity {
         this.state = PlaneState.MOVING;
         movingPlane = new Sprite("images/SpacePlane/MovingPlane.png");
         shootingPlane = new Sprite("images/SpacePlane/ShootingPlane.png");
+        explodingPlane = new Sprite("images/SpacePlane/ExplodingPlane.png");
     }
 
 
     public void update(Scene scene){
-        // control by mouse
-        scene.setOnMouseMoved(e -> {
-            this.moveTo(e.getX(), e.getY());
-        });
-
-        scene.setOnMouseDragged(e -> {
-            this.moveTo(e.getX(), e.getY());
-        });
-
-        scene.setOnMousePressed(e -> {
-            this.startShooting();
-            this.state = PlaneState.SHOOTING; 
-        });
-
-        scene.setOnMouseReleased(e -> {
-            this.stopShooting();
-            this.state = PlaneState.MOVING;
-        });
 
         //spriteCounter becomes 0 after each time it reachs framePerSprite
         this.spriteCounter++;
@@ -59,28 +44,49 @@ public class Plane extends Entity {
             this.spriteCounter = 0;
         }
 
-        switch(state){
-            case PlaneState.MOVING:
-                currentSprite = movingPlane;
-                break;
-            case PlaneState.SHOOTING:
-                currentSprite = shootingPlane;
-                break;
+        if(this.state == PlaneState.EXPLODING){
+            scene.setOnMouseMoved(e->{});
+            scene.setOnMouseDragged(e->{});
+            scene.setOnMousePressed(e->{});
+            scene.setOnMouseReleased(e->{});
+            currentSprite = explodingPlane;
+            if(currentSprite.getCurrentSpriteNum() == currentSprite.getTotalSprite()){
+                this.die();
+            }
         }
-        currentSprite.getCurrentSpriteNum(spriteCounter);
+        else{
+            // control by mouse
+            scene.setOnMouseMoved(e -> {
+                this.moveTo(e.getX(), e.getY());
+            });
+
+            scene.setOnMouseDragged(e -> {
+                this.moveTo(e.getX(), e.getY());
+            });
+
+            scene.setOnMousePressed(e -> {
+                this.startShooting();
+                this.state = PlaneState.SHOOTING; 
+            });
+
+            scene.setOnMouseReleased(e -> {
+                this.stopShooting();
+                this.state = PlaneState.MOVING;
+            });
+
+            switch(state){
+                case PlaneState.MOVING:
+                    currentSprite = movingPlane;
+                    break;
+                case PlaneState.SHOOTING:
+                    currentSprite = shootingPlane;
+                    break;
+            }
+        }
+
+        currentSprite.setCurrentSpriteNum(spriteCounter);
         this.image = currentSprite.getCurrentSprite();
-        this.setColliBox(this.getX()+xOffset, this.getY()+yOffset, this.getWidth()-2*xOffset, this.getHeight()-2*yOffset);
-    }
-
-    public void die(){
-        alive = false;
-    }
-
-    public boolean isAlive(){
-        if(alive){
-            return true;
-        }
-        return false;
+        this.setColliBox(this.getX()+xOffset, this.getY()+yOffset, this.getWidth()-2*xOffset, this.getHeight()-2*yOffset);  
     }
 
     @Override
@@ -102,7 +108,6 @@ public class Plane extends Entity {
                 bullet.draw(gc);
             }
         }
-
     }
 
     public void moveTo(double x, double y) {
@@ -170,5 +175,21 @@ public class Plane extends Entity {
             this.setCollidable(true);
         });
         invisible.play();
+    }
+
+    //exploding animation
+    public void exploding(){
+        this.state = PlaneState.EXPLODING;
+    }
+
+    private void die(){
+        alive = false;
+    }
+
+    public boolean isAlive(){
+        if(alive){
+            return true;
+        }
+        return false;
     }
 }

@@ -51,14 +51,15 @@ public class GamePane extends Pane {
 
     private void update(Scene scene){
         plane.update(scene);
-        if (this.map.getMonsters().size() == 0 && this.plane.isAlive()) {
-            this.map.spawn(this);
+        // if (this.map.getMonsters().size() == 0 && this.plane.isAlive()) 
+        if(this.plane.isAlive()){
+            this.map.update();
         }
 
         // monster update
         for (Monster monster : this.map.getMonsters()) {
             if (collisionHandler.checkCollision(this.plane, monster)) {
-                this.plane.die();
+                this.plane.exploding();
             }
             for (Bullet bullet : this.plane.getBullets()) {
                 if (collisionHandler.checkCollision(bullet, monster)) {
@@ -87,6 +88,9 @@ public class GamePane extends Pane {
                 it.remove();
             }
         }
+
+        //map update
+        // this.map.update();
     }
 
     private void draw(GraphicsContext gc){
