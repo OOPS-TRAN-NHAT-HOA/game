@@ -89,10 +89,10 @@ public class MyMap extends Entity {
 			Monster monster = new Monster();
 			switch(monsterType){
 			case CHICKEN1:
-				monster = new Monster("file:images/Invader/chicken1.png",10);
+				monster = new Monster("file:images/Invader/chicken.png",10);
 				break;
 			case CHICKEN2:
-				monster = new Monster("file:images/Invader/chicken2.png",30);
+				monster = new Monster("file:images/Invader/chicken1.1.png",30);
 				break;
 			}
 			this.monsters.add(monster);

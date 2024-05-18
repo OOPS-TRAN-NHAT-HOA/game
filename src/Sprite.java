@@ -24,7 +24,7 @@ public class Sprite {
 		
 	}
 	//use for sprite in square shape
-	Sprite(String path){
+	Sprite(String path, double degree){
 		try{
 
 			this.spriteSheet = ImageIO.read(new File(path));
@@ -39,7 +39,7 @@ public class Sprite {
 			int tileSize = spriteSheet.getHeight();
 			while(x < this.spriteSheet.getWidth()){
 				bufferedImageTemp = this.spriteSheet.getSubimage( x, 0, tileSize, tileSize);
-				javafx.scene.image.Image tmp = SwingFXUtils.toFXImage(rotate(bufferedImageTemp,-90),null);
+				javafx.scene.image.Image tmp = SwingFXUtils.toFXImage(rotate(bufferedImageTemp, degree),null);
 				addSprite(tmp);
 				x += tileSize;
 			}

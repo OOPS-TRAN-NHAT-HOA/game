@@ -8,6 +8,7 @@ public class DropItem extends Entity {
     static enum Items {
         HEART,
         UPGRADGEBULLETS,
+        SHIELD
     }
     private Items Item;
     private boolean moving;
@@ -23,6 +24,9 @@ public class DropItem extends Entity {
                 this.Item = name;
                 this.setImage("file:images/items/bulletitem.png", x, y);
                 break;
+            case Items.SHIELD:
+                this.Item = name;
+                this.setImage("file:images/items/Shield/item-shield-on50.png", x, y);
             default:
         }
         if (this.getImage() != null) {
@@ -67,6 +71,8 @@ public class DropItem extends Entity {
             case Items.UPGRADGEBULLETS:
                 plane.bulletLevel = Math.min(plane.bulletLevel + 1, 3);
                 break;
+            case Items.SHIELD:
+                plane.invisible(7);
         }
         System.out.println("Effected!!!");
     }

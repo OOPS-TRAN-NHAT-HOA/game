@@ -15,8 +15,6 @@ import javafx.stage.Stage;
 import javafx.scene.Cursor;
 
 public class GamePane extends Pane {
-    private Scene menuScene;
-
     private final int fps = 60;
     private double gameWidth;
     private double gameHeight;
@@ -31,9 +29,7 @@ public class GamePane extends Pane {
     public Scene gameScene;
     private AnimationTimer gameloop;
     
-    GamePane(Scene menu) {
-        this.menuScene = menu;
-
+    GamePane() {
         // get your screenSize
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         gameWidth = screenSize.getWidth();
@@ -156,13 +152,13 @@ public class GamePane extends Pane {
         exitButton.setCursor(Cursor.HAND);
         exitButton.setOnAction(e-> {
             Stage stage = (Stage) this.gameScene.getWindow();
-            stage.setScene(menuScene);
+            stage.setScene(App.menuScene);
         });
 
         // restart button
         Button restartButton = new Button();
         ImageView restart = new ImageView("file:images/start.png");
-        restartButton.setTranslateX(940);
+        restartButton.setTranslateX(930);
         restartButton.setTranslateY(630);
         restartButton.setPrefSize(restart.getFitWidth(), restart.getFitHeight());
         restartButton.setGraphic(restart);

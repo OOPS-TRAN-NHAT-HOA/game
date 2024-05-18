@@ -9,34 +9,39 @@ import javafx.stage.Stage;
 import java.awt.*;
 
 public class App extends Application {
-    private double screenWidth;
-    private double screenHeight;
+    static protected Pane menuPane;
+    static protected Scene menuScene;
+
+    static protected Pane secondMenuPane;
+    static protected Scene secondMenuScene;
+
+    static protected double screenWidth;
+    static protected double screenHeight;
+    static {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        screenWidth = screenSize.getWidth();
+        screenHeight = screenSize.getHeight();
+    }
 
     @Override
     public void start(Stage stage) {
         // get your screenSize
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        screenWidth = screenSize.getWidth();
-        screenHeight = screenSize.getHeight();
 
         // icon
         Image icon = new Image("file:images/Invader/chicken.png");
         stage.getIcons().add(icon);
 
         //Main menu -------------------------------------------------------------------------------------------
-        Pane menuPane = new Pane();
-        Scene menuScene = new Scene(menuPane, screenWidth, screenHeight);
+        App.menuPane = new Pane();
+        App.menuScene = new Scene(menuPane, screenWidth, screenHeight);
 
-        // background
         ImageView background = new ImageView("file:images/Space/space.png");
         background.setFitWidth(screenWidth);
 
-        // title
         ImageView title = new ImageView("file:images/title.png");
         title.setX(283);
         title.setY(30);        
 
-        // exit button
         Button exitButton = new Button();
         ImageView exit = new ImageView("file:images/exit.png");
         exitButton.setTranslateX(30);
@@ -46,7 +51,6 @@ public class App extends Application {
         exitButton.setStyle("-fx-background-color: Transparent");
         exitButton.setCursor(Cursor.HAND);
 
-        // start button
         Button startButton = new Button();
         ImageView start = new ImageView("file:images/start.png");
         startButton.setTranslateX(930);
@@ -63,7 +67,10 @@ public class App extends Application {
         ImageView background2 = new ImageView("file:images/Space/space.png");
         background2.setFitWidth(screenWidth);
 
-        Pane secondMenuPane = new Pane(); Button continueButton = new Button("Continue"); continueButton.setTranslateX(500); continueButton.setTranslateY(100);
+        App.secondMenuPane = new Pane(); 
+        Button continueButton = new Button("Continue"); 
+        continueButton.setTranslateX(500); 
+        continueButton.setTranslateY(100);
         Button newGameButton = new Button("New game");
         newGameButton.setTranslateX(500);
         newGameButton.setTranslateY(200);
@@ -71,9 +78,9 @@ public class App extends Application {
         Button backButton = new Button("Back");
         backButton.setTranslateX(500);
         backButton.setTranslateY(300);
-        secondMenuPane.getChildren().addAll(background2, continueButton, newGameButton, backButton);
+        App.secondMenuPane.getChildren().addAll(background2, continueButton, newGameButton, backButton);
 
-        Scene secondScene = new Scene(secondMenuPane, screenWidth, screenHeight);
+        App.secondMenuScene = new Scene(secondMenuPane, screenWidth, screenHeight);
 
 
 
@@ -87,15 +94,15 @@ public class App extends Application {
         
         exitButton.setOnAction(e-> stage.close());
         startButton.setOnAction(e-> {
-            stage.setScene(secondScene);
+            stage.setScene(secondMenuScene);
         });
 
         continueButton.setOnAction(e-> {
-            GamePane battle = new GamePane(secondScene);
+            GamePane battle = new GamePane();
             stage.setScene(battle.getScene());
         });
         newGameButton.setOnAction(e -> {
-            GamePane battle = new GamePane(secondScene);
+            GamePane battle = new GamePane();
             stage.setScene(battle.getScene());
         });
         backButton.setOnAction(e -> stage.setScene(menuScene));

@@ -1,6 +1,7 @@
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.*;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
@@ -102,6 +103,9 @@ public class Monster extends Entity {
         }
         else if (p < 0.2) { // 10% for bullet
             return new DropItem(DropItem.Items.UPGRADGEBULLETS, this.getX(), this.getY());
+        }
+        else if (p < 0.3) { // 10% for shield
+            return new DropItem(DropItem.Items.SHIELD, this.getX(), this.getY());
         }
         return null;
     }

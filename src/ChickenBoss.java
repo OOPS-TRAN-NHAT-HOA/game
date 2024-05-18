@@ -1,4 +1,3 @@
-package mySrc;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.animation.KeyFrame;
@@ -43,9 +42,10 @@ public class ChickenBoss extends Entity {
 
     public void update(){
         switch(currentState){
-        case BossState.SPAWN:
-            spawn(spawnXPos, spawnYPos);
-            break;
+            case BossState.SPAWN:
+                spawn(spawnXPos, spawnYPos);
+                break;
+            default:
         }
         //spriteCounter becomes 0 after each time it reachs framePerSprite
         this.spriteCounter++;

@@ -1,8 +1,8 @@
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
-import javafx.scene.Parent;
 import javafx.util.Duration;
 import java.util.*; 
 
@@ -18,21 +18,27 @@ public class Plane extends Entity {
     private Timeline shootingTimeline;
     private List<Bullet> planeBullets;
     protected int bulletLevel = 1;
+
     private final double xOffset = 65, yOffset = 45;//offset of the colliBox from the Image
     private Sprite currentSprite, movingPlane, shootingPlane, explodingPlane;
     private final int framePerSprite = 6;
     private int spriteCounter = 0;
     private PlaneState state;
+
+    private Image shield;
+    private int shieldState = 1; // 1 is visible, 0 otherwise
+    private Timeline invisibleTimeline, flickerTimeline;
     
 
     Plane(int x, int y) {
-        this.invisible();
+        this.invisible(5);
         this.alive = true;
         this.planeBullets = new ArrayList<>();
         this.state = PlaneState.MOVING;
-        movingPlane = new Sprite("images/SpacePlane/MovingPlane.png");
-        shootingPlane = new Sprite("images/SpacePlane/ShootingPlane.png");
-        explodingPlane = new Sprite("images/SpacePlane/ExplodingPlane.png");
+        movingPlane = new Sprite("images/SpacePlane/MovingPlane.png", -90);
+        shootingPlane = new Sprite("images/SpacePlane/ShootingPlane.png", -90);
+        explodingPlane = new Sprite("images/SpacePlane/ExplodingPlane.png", -90);
+        this.shield = new Image("file:images/items/Shield/item-shield-on110.png");
     }
 
 
@@ -81,6 +87,7 @@ public class Plane extends Entity {
                 case PlaneState.SHOOTING:
                     currentSprite = shootingPlane;
                     break;
+                default:
             }
         }
 
@@ -95,11 +102,15 @@ public class Plane extends Entity {
         //debug the colliBox
         // gc.fillRect(this.getColliBox().getX(), this.getColliBox().getY(), this.getColliBox().getWidth(), this.getColliBox().getHeight());
 
+        if (this.isCollidable == false && this.shieldState == 1) {
+            gc.drawImage(this.shield, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        }
+
         gc.drawImage(this.getImage(), this.getX(), this.getY(), this.getWidth(), this.getHeight());
 
         //draw bullet
         Iterator<Bullet> it = getBullets().iterator();
-        while (it.hasNext()){
+        while (it.hasNext()) {
             Bullet bullet = it.next();
             if (bullet.isStop()) {
                 it.remove();
@@ -165,19 +176,31 @@ public class Plane extends Entity {
         }
     }
 
-    // invisible for five second
-    public void invisible() {
+    public void invisible(double t) {
         this.setCollidable(false);
-        Timeline invisible = new Timeline(new KeyFrame(Duration.seconds(5), e -> {
+        if (this.flickerTimeline != null) {
+            this.flickerTimeline.stop();
+        }
+        if (this.invisibleTimeline != null) {
+            this.invisibleTimeline.stop();
+        }
+        this.invisibleTimeline = new Timeline(new KeyFrame(Duration.seconds(2 * t / 3), e -> {
         }));
-        invisible.setCycleCount(1);
-        invisible.setOnFinished(e -> {
-            this.setCollidable(true);
+        this.invisibleTimeline.setOnFinished(e -> {
+            this.flickerTimeline = new Timeline(new KeyFrame(Duration.seconds(t / 3 / 15), E -> {
+                this.shieldState ^= 1;
+            }));
+            this.flickerTimeline.setCycleCount(15);
+            this.flickerTimeline.setOnFinished(E -> {
+                this.setCollidable(true);
+                this.shieldState = 1;
+            });
+            this.flickerTimeline.play();
         });
-        invisible.play();
+        this.invisibleTimeline.play();
     }
 
-    //exploding animation
+    // exploding animation
     public void exploding(){
         this.state = PlaneState.EXPLODING;
     }
