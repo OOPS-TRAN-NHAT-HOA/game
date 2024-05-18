@@ -98,13 +98,15 @@ public class Monster extends Entity {
     public DropItem dropSomething() {
         double p = rand.nextDouble(0, 1);
         // System.out.println(p);
-        if (p < 0.1) { // 10% for heart
+        if (p < 0.05) { // 5% for heart
             return new DropItem(DropItem.Items.HEART, this.getX(), this.getY());
         }
-        else if (p < 0.2) { // 10% for bullet
+        p = rand.nextDouble(0, 1);
+        if (p < 0.10) { // 10% for bullet
             return new DropItem(DropItem.Items.UPGRADGEBULLETS, this.getX(), this.getY());
         }
-        else if (p < 0.3) { // 10% for shield
+        p = rand.nextDouble(0, 1);
+        if (p < 0.05) { // 5% for shield
             return new DropItem(DropItem.Items.SHIELD, this.getX(), this.getY());
         }
         return null;
