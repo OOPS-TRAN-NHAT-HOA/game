@@ -30,13 +30,8 @@ public class GamePane extends Pane {
     private AnimationTimer gameloop;
     
     GamePane() {
-        // get your screenSize
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        gameWidth = screenSize.getWidth();
-        gameHeight = screenSize.getHeight();
-
         // setup
-        this.canvas = new Canvas(gameWidth, gameHeight);
+        this.canvas = new Canvas(App.screenWidth, App.screenHeight);
         this.gc = canvas.getGraphicsContext2D();
         this.gameScene = new Scene(this);
         this.getChildren().add(canvas);
@@ -60,9 +55,25 @@ public class GamePane extends Pane {
             for (Bullet bullet : this.plane.getBullets()) {
                 if (collisionHandler.checkCollision(bullet, monster)) {
                     monster.takeDamage(bullet.getDamage());
-                    explosion.add(new ExplosionAnimation(bullet.getX() - 30, bullet.getY() - 25));
+                    explosion.add(new ExplosionAnimation(1, bullet.getX() - 30, bullet.getY() - 25));
                     bullet.stop();
                 }
+            }
+            for (Meteorite meteorite : this.map.getMeteorites()) {
+                if (collisionHandler.checkCollision(monster, meteorite)) {
+                    monster.takeDamage(7);
+                    explosion.add(new ExplosionAnimation(2, meteorite.getX() + meteorite.getWidth() / 3, meteorite.getY() + meteorite.getHeight() / 3));
+                    meteorite.stop();
+                }
+            }
+        }
+
+        // Meteorite update
+        for (Meteorite meteorite : this.map.getMeteorites()) {
+            if (collisionHandler.checkCollision(plane, meteorite)) {
+                this.plane.exploding();
+                explosion.add(new ExplosionAnimation(2, meteorite.getX() + meteorite.getWidth() / 3, meteorite.getY() + meteorite.getHeight() / 3));
+                meteorite.stop();
             }
         }
 
@@ -151,6 +162,7 @@ public class GamePane extends Pane {
         exitButton.setStyle("-fx-background-color: Transparent");
         exitButton.setCursor(Cursor.HAND);
         exitButton.setOnAction(e-> {
+            App.planeType = -1;
             Stage stage = (Stage) this.gameScene.getWindow();
             stage.setScene(App.menuScene);
         });

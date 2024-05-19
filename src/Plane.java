@@ -13,6 +13,8 @@ enum PlaneState{
 }
 
 public class Plane extends Entity {
+    static final int TYPE1 = 1;
+    static final int TYPE2 = 2;
 
     protected boolean alive;
     private Timeline shootingTimeline;
@@ -34,11 +36,11 @@ public class Plane extends Entity {
         this.invisible(5);
         this.alive = true;
         this.planeBullets = new ArrayList<>();
+        this.shield = new Image("file:images/items/Shield/item-shield-on100.png");
         this.state = PlaneState.MOVING;
         movingPlane = new Sprite("images/SpacePlane/MovingPlane.png", -90);
         shootingPlane = new Sprite("images/SpacePlane/ShootingPlane.png", -90);
         explodingPlane = new Sprite("images/SpacePlane/ExplodingPlane.png", -90);
-        this.shield = new Image("file:images/items/Shield/item-shield-on110.png");
     }
 
 
@@ -180,6 +182,7 @@ public class Plane extends Entity {
         this.setCollidable(false);
         if (this.flickerTimeline != null) {
             this.flickerTimeline.stop();
+            this.shieldState = 1;
         }
         if (this.invisibleTimeline != null) {
             this.invisibleTimeline.stop();

@@ -74,6 +74,5 @@ public class DropItem extends Entity {
             case Items.SHIELD:
                 plane.invisible(7);
         }
-        System.out.println("Effected!!!");
     }
 }

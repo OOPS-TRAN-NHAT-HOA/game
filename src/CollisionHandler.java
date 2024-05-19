@@ -27,4 +27,14 @@ public class CollisionHandler {
     public boolean checkCollision(Plane plane, Egg egg) {
         return plane.isCollidable && checkCollision(plane.getColliBox(), egg.getColliBox());
     }
+    
+    // plane - meteorite
+    public boolean checkCollision(Plane plane, Meteorite meteorite) {
+        return plane.isCollidable && checkCollision(plane.getColliBox(), meteorite.getColliBox());
+    }
+
+    // monster - meteorite
+    public boolean checkCollision(Monster monster, Meteorite meteorite) {
+        return checkCollision(monster.getColliBox(), meteorite.getColliBox());
+    }
 }

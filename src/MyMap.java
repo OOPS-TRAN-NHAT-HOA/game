@@ -15,6 +15,7 @@ public class MyMap extends Entity {
 	private boolean winningMap = false;
     private List<Monster> monsters;
 	private List<DropItem> dropItems;
+	private List<Meteorite> meteorites;
 	private Random rand = new Random();
 	private ChickenBoss boss;
 	private int currentWave; 
@@ -23,12 +24,17 @@ public class MyMap extends Entity {
 		this.setImage("file:images/Space/space.png", x, y);
 		this.monsters = new ArrayList<>();
 		this.dropItems = new ArrayList<>();
+		this.meteorites = new ArrayList<>();
 		this.move();
 		boss = new ChickenBoss(300.0,300.0);
 		currentWave = 0;
 	}
 
 	public void update(){
+		// 0.5% per frame
+		if (rand.nextDouble(0, 1) < 0.005) {
+			meteorites.add(new Meteorite(rand.nextDouble(0, App.screenWidth)));
+		}
 		if(currentWave<3){
 			if(monsters.isEmpty()){
 				currentWave++;
@@ -52,6 +58,17 @@ public class MyMap extends Entity {
 	public void draw(GraphicsContext gc){
         gc.drawImage(this.getImage(), this.getX(), this.getY(), this.getWidth(), this.getHeight());
 		gc.drawImage(this.getImage(), this.getX(), this.getY() - this.getHeight(), this.getWidth(), this.getHeight());
+		
+		Iterator<Meteorite> meteoIterator = this.meteorites.iterator();
+		while (meteoIterator.hasNext()) {
+			Meteorite m = meteoIterator.next();
+			if (m.isStop()) {
+				meteoIterator.remove();
+			}
+			else {
+				m.draw(gc);
+			}
+		}
 		if(currentWave<3){
 			Iterator<Monster> it = this.monsters.iterator();
 			while (it.hasNext()) {
@@ -129,5 +146,9 @@ public class MyMap extends Entity {
 	
 	public List<DropItem> getDropItems() {
 		return this.dropItems;
+	}
+
+	public List<Meteorite> getMeteorites() {
+		return this.meteorites;
 	}
 }

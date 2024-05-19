@@ -1,5 +1,3 @@
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.util.*;
 
 import javafx.animation.KeyFrame;
@@ -32,8 +30,7 @@ public class Monster extends Entity {
         this.alive = true;
         this.setCollidable(true);
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        this.move(screenSize.getWidth(), screenSize.getHeight());
+        this.move(App.screenWidth, App.screenHeight);
     }
 
     @Override
@@ -106,7 +103,7 @@ public class Monster extends Entity {
             return new DropItem(DropItem.Items.UPGRADGEBULLETS, this.getX(), this.getY());
         }
         p = rand.nextDouble(0, 1);
-        if (p < 0.05) { // 5% for shield
+        if (p < 1) { // 5% for shield
             return new DropItem(DropItem.Items.SHIELD, this.getX(), this.getY());
         }
         return null;

@@ -91,6 +91,6 @@ public class ChickenBoss extends Entity {
         double coorX = this.getX()+aX, coorY = this.getY()+aY;
         this.setX(coorX);
         this.setY(coorY);
-        System.out.println(coorX+"/"+coorY);
+        // System.out.println(coorX+"/"+coorY);
     }
 }

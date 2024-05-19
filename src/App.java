@@ -15,6 +15,9 @@ public class App extends Application {
     static protected Pane secondMenuPane;
     static protected Scene secondMenuScene;
 
+    static protected Pane thirdMenuPane;
+    static protected Scene thirdMenuScene;
+
     static protected double screenWidth;
     static protected double screenHeight;
     static {
@@ -22,12 +25,10 @@ public class App extends Application {
         screenWidth = screenSize.getWidth();
         screenHeight = screenSize.getHeight();
     }
+    static public int planeType = -1;
 
     @Override
     public void start(Stage stage) {
-        // get your screenSize
-
-        // icon
         Image icon = new Image("file:images/Invader/chicken.png");
         stage.getIcons().add(icon);
 
@@ -87,8 +88,6 @@ public class App extends Application {
 
         // ----------------------------------------------------------------------------------------------------
         
-        // thirdMenu-------------------------------------------------------------------------------------------
-        // TODO: chỗ nãy để chọn máy bay nhưng chưa làm gì cả
         // ----------------------------------------------------------------------------------------------------
 
         
