@@ -47,6 +47,19 @@ public class GamePane extends Pane {
             this.map.update();
         }
 
+        // boss check
+        if(this.map.hasBoss()){
+            if(collisionHandler.checkCollision(this.plane, this.map.getBoss())){
+                this.plane.exploding();
+            }
+            for (Bullet bullet : this.plane.getBullets()){
+                if(collisionHandler.checkCollision(bullet,this.map.getBoss())){
+                    bullet.stop();
+                    explosion.add(new ExplosionAnimation(1, bullet.getX() - 30, bullet.getY() - 25));
+                    this.map.getBoss().takeDMG(bullet.getDamage());
+                }
+            } 
+        }
         // monster update
         for (Monster monster : this.map.getMonsters()) {
             if (collisionHandler.checkCollision(this.plane, monster)) {
@@ -96,8 +109,10 @@ public class GamePane extends Pane {
             }
         }
 
-        //map update
-        // this.map.update();
+        //winning
+        // if(this.map.isWinning()){
+        //     gameWin();
+        // }
     }
 
     private void draw(GraphicsContext gc){
@@ -183,6 +198,10 @@ public class GamePane extends Pane {
 
         this.getChildren().addAll(gameOverBg,exitButton,restartButton);
     }
+
+    public void gameWin(){
+
+    }    
 
     public double getScreenWidth(){
         return gameWidth;

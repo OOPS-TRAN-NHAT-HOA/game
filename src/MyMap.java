@@ -1,4 +1,3 @@
-
 import java.util.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -19,7 +18,7 @@ public class MyMap extends Entity {
 	private Random rand = new Random();
 	private ChickenBoss boss;
 	private int currentWave; 
-
+	private boolean hasBoss = false;
 	public MyMap(double x, double y){
 		this.setImage("file:images/Space/space.png", x, y);
 		this.monsters = new ArrayList<>();
@@ -45,13 +44,23 @@ public class MyMap extends Entity {
 				case 2:
 					spawn(MonsterType.CHICKEN2);
 					break;
-				case 3:					
+				case 3:
+					this.hasBoss = true;					
 					break;
 				}
 			}
 		}
 		else{
 			boss.update();
+			Iterator<Monster> it = this.boss.getSmallerMonster().iterator();
+			while (it.hasNext()) {
+				Monster monster = it.next();
+				this.monsters.add(monster);
+				it.remove();
+			}
+			// if(boss.winBoss()){
+			// 	winningMap = true;
+			// }
 		}
 	}
 
@@ -129,15 +138,19 @@ public class MyMap extends Entity {
 		timeline.play();
 	}
 
-	private void win(){
-		winningMap = true;
-	}
-
-	public boolean isWining(){
+	public boolean isWinning(){
 		if(winningMap)
 			return true;
 		else
 			return false;
+	}
+
+	public boolean hasBoss(){
+		return this.hasBoss;
+	}
+
+	public ChickenBoss getBoss(){
+		return this.boss;
 	}
 
 	public List<Monster> getMonsters() {

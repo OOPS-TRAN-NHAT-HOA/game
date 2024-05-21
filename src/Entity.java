@@ -61,9 +61,6 @@ abstract public class Entity {
 
     public void setCollidable(boolean tmp){
     	isCollidable = tmp;
-        if(tmp){
-            setColliBox(0,0,0,0);
-        }
     }
 
     public void setColliBox(double x, double y, double width, double height){

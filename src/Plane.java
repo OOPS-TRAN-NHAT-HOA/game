@@ -53,6 +53,7 @@ public class Plane extends Entity {
         }
 
         if(this.state == PlaneState.EXPLODING){
+            this.stopShooting();
             scene.setOnMouseMoved(e->{});
             scene.setOnMouseDragged(e->{});
             scene.setOnMousePressed(e->{});
