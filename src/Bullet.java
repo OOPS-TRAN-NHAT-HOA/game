@@ -14,14 +14,14 @@ public class Bullet extends Entity {
     Bullet() {
         this.setCollidable(true);
         this.moving = true;
-        this.damage = 7;
+        this.damage = 100;
     }
 
     Bullet(String path) {
         super(path);
         this.setCollidable(true);
         this.moving = true;
-        this.damage = 7;
+        this.damage = 100;
     }
     public void setDamage(int dmg) {
         this.damage = dmg;

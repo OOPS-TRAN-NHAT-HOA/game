@@ -45,7 +45,7 @@ public class BossBullet extends Entity{
 
     public void draw(GraphicsContext gc){
         //debug the colliBox
-        gc.fillRect(this.getColliBox().getX(), this.getColliBox().getY(), this.getColliBox().getWidth(), this.getColliBox().getHeight());
+        // gc.fillRect(this.getColliBox().getX(), this.getColliBox().getY(), this.getColliBox().getWidth(), this.getColliBox().getHeight());
         gc.drawImage(this.getImage(), this.getX(), this.getY(), this.getWidth(), this.getHeight());
     }
 }

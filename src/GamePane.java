@@ -121,14 +121,14 @@ public class GamePane extends Pane {
         }
 
         //winning
-        // if(this.map.isWinning()){
-        //     gameWin();
-        // }
+        if(this.map.isWinning()){
+            gameWin();
+        }
     }
 
     private void draw(GraphicsContext gc){
         if(plane.isAlive()){
-            gc.clearRect(0, 0, gameWidth, gameHeight);
+            gc.clearRect(0, 0, App.screenWidth, App.screenHeight);
             this.map.draw(gc);
             this.plane.draw(gc);
             for (ExplosionAnimation ex : explosion) {
@@ -172,7 +172,7 @@ public class GamePane extends Pane {
     }
 
     private void gameOver(){
-        gc.clearRect(0, 0, gameWidth, gameHeight);
+        gc.clearRect(0, 0, App.screenWidth, App.screenHeight);
         gameloop.stop();
         gameScene.setCursor(Cursor.DEFAULT);
         ImageView gameOverBg = new ImageView("file:images/game-over.png");
@@ -211,7 +211,7 @@ public class GamePane extends Pane {
     }
 
     public void gameWin(){
-
+        gc.clearRect(0, 0, App.screenWidth, App.screenHeight);
     }    
 
     public double getScreenWidth(){

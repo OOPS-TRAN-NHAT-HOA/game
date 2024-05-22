@@ -12,7 +12,7 @@ public class Monster extends Entity {
     protected double Vy = 1;
     protected boolean alive;
     private Timeline timeline;
-    private final double xOffset = 10, yOffset = 5;//offset of the colliBox from the Image
+    private double xOffset = 10, yOffset = 5;//offset of the colliBox from the Image
 
     private int currentHitPoint, totalHitPoint;
 
@@ -35,7 +35,7 @@ public class Monster extends Entity {
     @Override
     public void draw(GraphicsContext gc) {
         // debug the colliBox  
-        // gc.fillRect(this.getColliBox().getX(), this.getColliBox().getY(), this.getColliBox().getWidth(), this.getColliBox().getHeight());
+        gc.fillRect(this.getColliBox().getX(), this.getColliBox().getY(), this.getColliBox().getWidth(), this.getColliBox().getHeight());
 
         //draw HP bar
         gc.setFill(Color.WHITE);
@@ -117,5 +117,10 @@ public class Monster extends Entity {
 
     public boolean isAlive() {
         return alive;
+    }
+
+    public void setOffset(double x, double y){
+        this.xOffset=x;
+        this.yOffset=y;
     }
 }

@@ -52,8 +52,9 @@ public class ChickenBoss extends Entity {
             spawn(spawnXPos, spawnYPos);
             break;
         case BossState.SHOOTING_EGG:
-            for(int i =0; i<=12; i++){
-                this.bullets.add(new BossBullet(1, this.getX()+this.getWidth()/2, this.getY()+this.getHeight()/2, 30*i));
+            double p = rand.nextInt(12,24);
+            for(int i =0; i<=p; i++){
+                this.bullets.add(new BossBullet(1, this.getX()+this.getWidth()/2, this.getY()+this.getHeight()/2, 360/p*i));
             }
             switchState = true;
             break;
@@ -96,8 +97,10 @@ public class ChickenBoss extends Entity {
             break;
         case BossState.END:
             switchState = false;
+            winBoss = true;
+            System.out.println("END GAME!");
             break;
-        } 
+        }
 
         chooseState();
 
@@ -189,6 +192,7 @@ public class ChickenBoss extends Entity {
 
     private void chooseState(){
         if(switchState){
+            if(currentHP > 0){
             switch(currentState){
             case BossState.SPAWN:
                 currentState = BossState.DO_NOTHING;
@@ -217,7 +221,7 @@ public class ChickenBoss extends Entity {
                 }
                 else{
                     double p = rand.nextDouble(0,1);
-                    if(p<0.75){
+                    if(p<0.5){
                         currentState = BossState.SHOOTING_EGG;
                     }
                     else{
@@ -225,11 +229,16 @@ public class ChickenBoss extends Entity {
                     }
                 }
                 break;
-            case BossState.GET_OUT:
-                currentState = BossState.END;
-                break;
-            case BossState.END:
-                break;
+            }}
+            else{
+                switch(currentState){
+                case BossState.GET_OUT:
+                    currentState = BossState.END;
+                    break;
+                default :
+                    currentState = BossState.GET_OUT;
+                    break;
+                }
             }
         }
     }
@@ -258,6 +267,10 @@ public class ChickenBoss extends Entity {
             return;
         }
         this.currentHP -= dmg;
+    }
+
+    public boolean isWinning(){
+        return winBoss;
     }
 }
 

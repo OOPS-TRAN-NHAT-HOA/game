@@ -3,7 +3,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.util.Duration;
-
+import javafx.scene.image.Image;
 public class MyMap extends Entity {
 	// TODO: làm 3 phase, mỗi phase ra một loại quái mới, phase cuối có con boss
 	enum MonsterType{
@@ -15,21 +15,36 @@ public class MyMap extends Entity {
     private List<Monster> monsters;
 	private List<DropItem> dropItems;
 	private List<Meteorite> meteorites;
+	private Sprite background = new Sprite();
 	private Random rand = new Random();
 	private ChickenBoss boss;
-	private int currentWave; 
+	private int currentWave;
+	private int spriteCounter = -1;
+	private final int framePerSprite = 5;
 	private boolean hasBoss = false;
 	public MyMap(double x, double y){
 		this.setImage("file:images/Space/space.png", x, y);
 		this.monsters = new ArrayList<>();
 		this.dropItems = new ArrayList<>();
 		this.meteorites = new ArrayList<>();
-		this.move();
 		boss = new ChickenBoss(500.0,200.0);
 		currentWave = 0;
+		for(int i=1;i<=10;i++){
+			background.addSprite(new Image("file:images/Space/Image" + i +".jpg"));
+		}
+		this.image = background.getCurrentSprite();
 	}
 
 	public void update(){
+		//update background
+		//spriteCounter becomes 0 after each time it reachs framePerSprite
+        this.spriteCounter++;
+        if( this.spriteCounter > framePerSprite){
+            this.spriteCounter = 0;
+        }
+        background.setCurrentSpriteNum(spriteCounter);
+        this.image = background.getCurrentSprite();
+
 		// 0.5% per frame
 		if (rand.nextDouble(0, 1) < 0.005) {
 			meteorites.add(new Meteorite(rand.nextDouble(0, App.screenWidth)));
@@ -63,12 +78,14 @@ public class MyMap extends Entity {
 					it.remove();
 				}
 			}
+			if(boss.isWinning()){
+				this.winningMap = true;
+			}
 		}
 	}
 
 	public void draw(GraphicsContext gc){
         gc.drawImage(this.getImage(), this.getX(), this.getY(), this.getWidth(), this.getHeight());
-		gc.drawImage(this.getImage(), this.getX(), this.getY() - this.getHeight(), this.getWidth(), this.getHeight());
 		
 		Iterator<Meteorite> meteoIterator = this.meteorites.iterator();
 		while (meteoIterator.hasNext()) {
@@ -121,30 +138,28 @@ public class MyMap extends Entity {
 				break;
 			case CHICKEN2:
 				monster = new Monster("file:images/Invader/chicken1.1.png",30);
+				monster.setOffset(10,10);
 				break;
 			}
 			this.monsters.add(monster);
 		}
 	}
 	
-	public void move() {
-		Timeline timeline = new Timeline(new KeyFrame(Duration.millis(50), e-> {
-			if (this.getY() + 3 > this.getHeight()) {
-				this.setY(0);
-			}
-			else {
-				this.setY(this.getY() + 1);
-			}
-		}));
-		timeline.setCycleCount(Timeline.INDEFINITE);
-		timeline.play();
-	}
+	// public void move() {
+	// 	Timeline timeline = new Timeline(new KeyFrame(Duration.millis(50), e-> {
+	// 		if (this.getY() + 3 > this.getHeight()) {
+	// 			this.setY(0);
+	// 		}
+	// 		else {
+	// 			this.setY(this.getY() + 1);
+	// 		}
+	// 	}));
+	// 	timeline.setCycleCount(Timeline.INDEFINITE);
+	// 	timeline.play();
+	// }
 
 	public boolean isWinning(){
-		if(winningMap)
-			return true;
-		else
-			return false;
+		return winningMap;
 	}
 
 	public boolean hasBoss(){
@@ -170,4 +185,10 @@ public class MyMap extends Entity {
 	public List<Meteorite> getMeteorites() {
 		return this.meteorites;
 	}
+
+	//utility
+	/* Convenience method to convert RGB values (in the range 0-255) into a single integer */
+    private static int colour(int r, int g, int b) {
+        return (r*65536) + (g*256) + b;
+    }
 }
