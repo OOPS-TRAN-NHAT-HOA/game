@@ -29,7 +29,6 @@ public class Monster extends Entity {
         this.currentHitPoint = totalHP;
         this.alive = true;
         this.setCollidable(true);
-
         this.move(App.screenWidth, App.screenHeight);
     }
 

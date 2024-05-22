@@ -58,8 +58,19 @@ public class GamePane extends Pane {
                     explosion.add(new ExplosionAnimation(1, bullet.getX() - 30, bullet.getY() - 25));
                     this.map.getBoss().takeDMG(bullet.getDamage());
                 }
-            } 
+                for (Monster smallerMonster : this.map.getBoss().getSmallerMonster()){
+                    if(collisionHandler.checkCollision(bullet,smallerMonster)){
+                        bullet.stop();
+                        explosion.add(new ExplosionAnimation(1, bullet.getX() - 30, bullet.getY() - 25));
+                        smallerMonster.takeDamage(bullet.getDamage());
+                    }
+                    if(collisionHandler.checkCollision(this.plane, smallerMonster)){
+                        this.plane.exploding();
+                    }
+                }
+            }
         }
+
         // monster update
         for (Monster monster : this.map.getMonsters()) {
             if (collisionHandler.checkCollision(this.plane, monster)) {

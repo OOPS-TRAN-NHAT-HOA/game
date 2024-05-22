@@ -17,6 +17,8 @@ public class BossBullet extends Entity{
         switch(type){ // egg bullet type 1, 
         case 1:
             this.setImage(new Image("file:images/chickenboss/BossBulletEgg.png"));  
+            double xOffset = 5, yOffset = 5;
+            this.setColliBox(this.getX()+xOffset, this.getY()+yOffset, this.getWidth()-2*xOffset, this.getHeight()-2*yOffset);
             this.vX = velocity * Math.sin(angle);
             this.vY = - velocity * Math.cos(angle);
             movingTimeline = new Timeline(new KeyFrame(Duration.millis(20), e-> {

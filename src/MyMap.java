@@ -25,7 +25,7 @@ public class MyMap extends Entity {
 		this.dropItems = new ArrayList<>();
 		this.meteorites = new ArrayList<>();
 		this.move();
-		boss = new ChickenBoss(300.0,300.0);
+		boss = new ChickenBoss(500.0,200.0);
 		currentWave = 0;
 	}
 
@@ -55,12 +55,14 @@ public class MyMap extends Entity {
 			Iterator<Monster> it = this.boss.getSmallerMonster().iterator();
 			while (it.hasNext()) {
 				Monster monster = it.next();
-				this.monsters.add(monster);
-				it.remove();
+				if (!monster.isAlive()) {
+					DropItem dropItem = monster.dropSomething();
+					if (dropItem != null) {
+						this.dropItems.add(dropItem);
+					}
+					it.remove();
+				}
 			}
-			// if(boss.winBoss()){
-			// 	winningMap = true;
-			// }
 		}
 	}
 
@@ -147,6 +149,10 @@ public class MyMap extends Entity {
 
 	public boolean hasBoss(){
 		return this.hasBoss;
+	}
+
+	public ArrayList<Monster> getBossSmallerMonster() {
+		return this.boss.getSmallerMonster();
 	}
 
 	public ChickenBoss getBoss(){

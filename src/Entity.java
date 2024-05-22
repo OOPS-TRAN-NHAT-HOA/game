@@ -10,7 +10,9 @@ abstract public class Entity {
     protected Image image;
     protected double xPos , yPos;
 
-    Entity() {}
+    Entity() {
+        this.setColliBox(-1000, -1000, 1, 1);
+    }
     
     Entity(String path) {
         this.image = new Image(path);
@@ -61,6 +63,9 @@ abstract public class Entity {
 
     public void setCollidable(boolean tmp){
     	isCollidable = tmp;
+        if(tmp){
+            this.setColliBox(-1000,-1000,1,1);
+        }
     }
 
     public void setColliBox(double x, double y, double width, double height){

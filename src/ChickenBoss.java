@@ -12,14 +12,15 @@ public class ChickenBoss extends Entity {
         SHOOTING_EGG,
         SPAWN_SMALLER_CHICKEN,
         DO_NOTHING,
-        GET_OUT
+        GET_OUT,
+        END
     } 
     private Sprite chickenBossSprite = new Sprite();
     private int totalHP = 500, currentHP = 500;
     private final int framePerSprite = 8;
-    private int spriteCounter = -1;
+    private int spriteCounter = -1, restCounter = 1;
     private final double xOffset = 60, yOffset = 45;//offset of the colliBox from the Image
-    private double vX = 100, vY = 100; // boss velocity
+    private double vX = 10, vY = 10; // boss velocity
     private double spawnXPos, spawnYPos, x, y;
     private BossState currentState;
     private boolean switchState = false, winBoss = false;
@@ -51,73 +52,54 @@ public class ChickenBoss extends Entity {
             spawn(spawnXPos, spawnYPos);
             break;
         case BossState.SHOOTING_EGG:
-            if(switchState){
-                for(int i =0; i<=24; i++){
-                    this.bullets.add(new BossBullet(1, this.getX()+this.getWidth()/2, this.getY()+this.getHeight()/2, 15*i));
-                }
-                switchState = false;
+            for(int i =0; i<=12; i++){
+                this.bullets.add(new BossBullet(1, this.getX()+this.getWidth()/2, this.getY()+this.getHeight()/2, 30*i));
             }
-            
-            if(!switchState && this.bullets.isEmpty()){
-                switchState = true;
-                if(rand.nextDouble(0,1)>0.25){ // 75% change to moving, 25% continue to shooting egg
-                    currentState = BossState.MOVING;
-                }
-            }
+            switchState = true;
             break;
         case BossState.MOVING:
             if(switchState){
                 x = rand.nextDouble(0,App.screenWidth-this.getWidth()); 
-                y = rand.nextDouble(0,App.screenHeight-this.getHeight());
+                y = rand.nextDouble(10,App.screenHeight-this.getHeight()-400);
             }
             switchState = false;
             if(moveTo(x,y,vX,vY)){
                 switchState = true;
             }
-            if(switchState){
-                double p = rand.nextDouble(0,1);
-                if(p<0.005){  
-                    break;
-                }
-                else if(p<1){ 
-                    currentState = BossState.SPAWN_SMALLER_CHICKEN;
-                }
-                else if(p<0.15){
-                    currentState = BossState.SHOOTING_EGG;
-                }
-                else{
-                    currentState = BossState.DO_NOTHING;
-                }
-            }
             break;
         case BossState.SPAWN_SMALLER_CHICKEN:
-            for(int i = 0; i<5; i++){
+            for(int i = 0; i<10; i++){
                 Monster tempMonster ;
-                if(rand.nextInt(0,1)<0.5){
+                if(rand.nextDouble(0,1)<0.5){
                     tempMonster = new Monster("file:images/Invader/chicken.png",10);
                 }
                 else{
                     tempMonster = new Monster("file:images/Invader/chicken1.1.png",30);
                 }
-                tempMonster.setX( this.getX()+this.getWidth()/2);
-                tempMonster.setY( this.getY()+this.getHeight()/2);
+                tempMonster.setX( randomInRange(this.getX(),this.getX()+this.getWidth()-tempMonster.getWidth()));
+                tempMonster.setY( randomInRange(this.getY(),this.getY()+this.getHeight()-tempMonster.getHeight()));
                 smallerMonster.add(tempMonster);
             }
             switchState = true;
-            if(rand.nextDouble(0,1)<0.75){
-                currentState = BossState.MOVING;
-            }
-            else{
-                currentState = BossState.SHOOTING_EGG;
-            }
             break;
         case BossState.DO_NOTHING:
             switchState = false;
+            if(rest()){
+                switchState = true;
+            }
             break;
         case BossState.GET_OUT:
-            moveTo(-500,-500,vX,vY);
+            switchState = false;
+            if(moveTo(-500,-500,vX,vY)){
+                switchState = true;
+            }
+            break;
+        case BossState.END:
+            switchState = false;
             break;
         } 
+
+        chooseState();
 
         //spriteCounter becomes 0 after each time it reachs framePerSprite
         this.spriteCounter++;
@@ -131,6 +113,10 @@ public class ChickenBoss extends Entity {
 
     @Override
     public void draw(GraphicsContext gc) {
+        for(Monster monster : smallerMonster){
+            monster.draw(gc);
+
+        }
         for(BossBullet bossBullet : bullets){
             bossBullet.draw(gc);
         }
@@ -145,21 +131,20 @@ public class ChickenBoss extends Entity {
             }
         }
         //debug the colliBox
-        // gc.fillRect(this.getColliBox().getX(), this.getColliBox().getY(), this.getColliBox().getWidth(), this.getColliBox().getHeight());
+        gc.fillRect(this.getColliBox().getX(), this.getColliBox().getY(), this.getColliBox().getWidth(), this.getColliBox().getHeight());
         
         //draw HP bar
         gc.setFill(Color.WHITE);
-        gc.fillRect(this.getX()+20, this.getY()-20, this.getWidth()-40, 10);
+        gc.fillRect(this.getX()+20, this.getY()-20, 270, 10);
         gc.setFill(Color.RED);
         double remainingHealth = (double) currentHP/totalHP;
-        gc.fillRect(this.getX()+20, this.getY()-20, (this.getWidth()-40)*remainingHealth, 10);
+        gc.fillRect(this.getX()+20, this.getY()-20, 270*remainingHealth, 10);
 
         gc.drawImage(this.getImage(), this.getX(), this.getY(), this.getWidth(), this.getHeight()); 
     }
     
     public void spawn(double XPos,double YPos){
         if(moveTo(XPos,YPos,vX,vY)){
-            chooseState();
             switchState = true;
         }
     }
@@ -202,26 +187,68 @@ public class ChickenBoss extends Entity {
         return this.bullets;
     }
 
-    // public boolean winBoss(){
-    //     return this.winBoss();
-    // }
-
     private void chooseState(){
         if(switchState){
             switch(currentState){
             case BossState.SPAWN:
-                currentState = BossState.SHOOTING_EGG;
+                currentState = BossState.DO_NOTHING;
                 break;
             case BossState.SHOOTING_EGG:
-                double p = rand.nextDouble(0,1);
+                currentState = BossState.DO_NOTHING;
                 break;
             case BossState.MOVING:
+                currentState = BossState.DO_NOTHING;
                 break;
             case BossState.SPAWN_SMALLER_CHICKEN:
+                currentState = BossState.DO_NOTHING;
                 break;
             case BossState.DO_NOTHING:
+                if(this.currentHP < this.totalHP/2){
+                    double p = rand.nextDouble(0,1);
+                    if(p<0.5){
+                        currentState = BossState.SHOOTING_EGG;
+                    }
+                    else if(p<0.75){
+                        currentState = BossState.SPAWN_SMALLER_CHICKEN;
+                    }
+                    else{
+                        currentState = BossState.MOVING;
+                    }
+                }
+                else{
+                    double p = rand.nextDouble(0,1);
+                    if(p<0.75){
+                        currentState = BossState.SHOOTING_EGG;
+                    }
+                    else{
+                        currentState = BossState.MOVING;
+                    }
+                }
+                break;
+            case BossState.GET_OUT:
+                currentState = BossState.END;
+                break;
+            case BossState.END:
                 break;
             }
+        }
+    }
+
+    // Generating a random double number of a certain range 
+    private double randomInRange(double rangeMin, double rangeMax){
+        return rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
+    }
+
+    //boss rest in 1sec = 60 frames
+    private boolean rest(){
+        if(restCounter<60){
+            restCounter ++;
+            return false;
+        }
+        else{
+            restCounter = 0;
+            System.out.println("DONE REST!");
+            return true;
         }
     }
 
