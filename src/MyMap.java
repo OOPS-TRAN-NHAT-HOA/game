@@ -20,7 +20,7 @@ public class MyMap extends Entity {
 	private ChickenBoss boss;
 	private int currentWave;
 	private int spriteCounter = -1;
-	private final int framePerSprite = 5;
+	private final int framePerSprite = 2;
 	private boolean hasBoss = false;
 	public MyMap(double x, double y){
 		this.setImage("file:images/Space/space.png", x, y);
