@@ -6,7 +6,6 @@ import javafx.util.Duration;
 public class DropItem extends Entity {
 
     static enum Items {
-        HEART,
         UPGRADGEBULLETS,
         SHIELD
     }
@@ -16,10 +15,6 @@ public class DropItem extends Entity {
 
     DropItem(Items name, double x, double y) {
         switch (name) {
-            case Items.HEART:
-                this.Item = name;
-                this.setImage("file:images/items/heartitem.png", x, y);
-               break;
             case Items.UPGRADGEBULLETS:
                 this.Item = name;
                 this.setImage("file:images/items/bulletitem.png", x, y);
@@ -65,8 +60,6 @@ public class DropItem extends Entity {
 
     public void itemEffect(Plane plane) {
         switch (this.Item) {
-            case Items.HEART:
-                break;
             case Items.UPGRADGEBULLETS:
                 if (plane.bulletLevel == 3) {
                     plane.bulletdmg = Math.min(plane.bulletdmg + 1, 3);
