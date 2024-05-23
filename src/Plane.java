@@ -20,8 +20,9 @@ public class Plane extends Entity {
     private Timeline shootingTimeline;
     private List<Bullet> planeBullets;
     protected int bulletLevel = 1;
+    public int bulletdmg = 1;
 
-    private final double xOffset = 85, yOffset = 85;//offset of the colliBox from the Image
+    private final double xOffset = 90, yOffset = 90;//offset of the colliBox from the Image
     private Sprite currentSprite, movingPlane, shootingPlane, explodingPlane;
     private final int framePerSprite = 6;
     private int spriteCounter = 0;
@@ -121,7 +122,7 @@ public class Plane extends Entity {
             }
         }
         //debug the colliBox
-        gc.fillRect(this.getColliBox().getX(), this.getColliBox().getY(), this.getColliBox().getWidth(), this.getColliBox().getHeight());
+        // gc.fillRect(this.getColliBox().getX(), this.getColliBox().getY(), this.getColliBox().getWidth(), this.getColliBox().getHeight());
     }
 
     public void moveTo(double x, double y) {
@@ -136,6 +137,7 @@ public class Plane extends Entity {
     // plane attack
     private void shoot() {
         Bullet bullet = new Bullet("file:images/Bullets/bullet1.png");
+        bullet.setDamage(bulletdmg);
         bullet.setSpeed(0, -10);
         double x = this.getX() + this.getWidth() / 2 - bullet.getWidth() / 2;
         double y = this.getY();

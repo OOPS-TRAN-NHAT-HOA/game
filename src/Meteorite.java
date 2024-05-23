@@ -17,14 +17,14 @@ public class Meteorite extends Entity {
         this.moving = true;
         this.setColliBox(-100,-100,1,1);
         // 1.5 seconds
-        warningTimeline = new Timeline(new KeyFrame(Duration.millis(100), e -> {
+        warningTimeline = new Timeline(new KeyFrame(Duration.millis(10), e -> {
         }));
         warningTimeline.setCycleCount(15);
 
         // 1 seconds
         movingTimeline = new Timeline(new KeyFrame(Duration.millis(1), e -> {
             this.setY(this.getY() + 1);
-            this.setColliBox(this.getX() + 20, this.getY() + 25, this.getWidth() - 45, this.getHeight() - 40);
+            this.setColliBox(this.getX() + 25, this.getY() + 35, this.getWidth() - 57, this.getHeight() - 45);
         }));
         movingTimeline.setCycleCount(1000);
         movingTimeline.setOnFinished(e -> this.moving = false);

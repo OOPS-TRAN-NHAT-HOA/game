@@ -14,14 +14,14 @@ public class Bullet extends Entity {
     Bullet() {
         this.setCollidable(true);
         this.moving = true;
-        this.damage = 100;
+        this.damage = 1;
     }
 
     Bullet(String path) {
         super(path);
         this.setCollidable(true);
         this.moving = true;
-        this.damage = 100;
+        this.damage = 1;
     }
     public void setDamage(int dmg) {
         this.damage = dmg;
@@ -68,6 +68,7 @@ public class Bullet extends Entity {
         cloneBullet.setSpeed(this.Vx, this.Vy);
         cloneBullet.setX(this.getX());
         cloneBullet.setY(this.getY());
+        cloneBullet.setDamage(this.damage);
 
         cloneBullet.move();
         return cloneBullet;

@@ -66,9 +66,11 @@ public class DropItem extends Entity {
     public void itemEffect(Plane plane) {
         switch (this.Item) {
             case Items.HEART:
-                // TODO
                 break;
             case Items.UPGRADGEBULLETS:
+                if (plane.bulletLevel == 3) {
+                    plane.bulletdmg = Math.min(plane.bulletdmg + 1, 3);
+                }
                 plane.bulletLevel = Math.min(plane.bulletLevel + 1, 3);
                 break;
             case Items.SHIELD:

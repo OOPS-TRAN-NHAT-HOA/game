@@ -1,8 +1,5 @@
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.util.Duration;
 import java.util.*;
 import javafx.scene.paint.Color;
 public class ChickenBoss extends Entity {
@@ -229,6 +226,8 @@ public class ChickenBoss extends Entity {
                     }
                 }
                 break;
+                default:
+                    break;
             }}
             else{
                 switch(currentState){

@@ -14,7 +14,7 @@ public class Monster extends Entity {
     private Timeline timeline;
     private double xOffset = 10, yOffset = 5;//offset of the colliBox from the Image
 
-    private int currentHitPoint, totalHitPoint;
+    protected int currentHitPoint, totalHitPoint;
 
     private Random rand = new Random();
 
@@ -98,7 +98,7 @@ public class Monster extends Entity {
             return new DropItem(DropItem.Items.HEART, this.getX(), this.getY());
         }
         p = rand.nextDouble(0, 1);
-        if (p < 0.10) { // 10% for bullet
+        if (p < 0.1) { // 10% for bullet
             return new DropItem(DropItem.Items.UPGRADGEBULLETS, this.getX(), this.getY());
         }
         p = rand.nextDouble(0, 1);

@@ -69,17 +69,20 @@ public class App extends Application {
         background2.setFitWidth(screenWidth);
 
         App.secondMenuPane = new Pane(); 
-        Button continueButton = new Button("Continue"); 
-        continueButton.setTranslateX(500); 
-        continueButton.setTranslateY(100);
-        Button newGameButton = new Button("New game");
-        newGameButton.setTranslateX(500);
-        newGameButton.setTranslateY(200);
+        Button newGameButton= new Button("NEWGAME"); 
+        newGameButton.setTranslateX(500); 
+        newGameButton.setTranslateY(100);
+        Button infiniteButton = new Button("INFINITE");
+        infiniteButton.setTranslateX(500);
+        infiniteButton.setTranslateY(200);
+        Button ninjaleadButton = new Button("NINJA LEAD");
+        ninjaleadButton.setTranslateX(500);
+        ninjaleadButton.setTranslateY(300);
 
         Button backButton = new Button("Back");
         backButton.setTranslateX(500);
-        backButton.setTranslateY(300);
-        App.secondMenuPane.getChildren().addAll(background2, continueButton, newGameButton, backButton);
+        backButton.setTranslateY(400);
+        App.secondMenuPane.getChildren().addAll(background2, newGameButton, infiniteButton, ninjaleadButton, backButton);
 
         App.secondMenuScene = new Scene(secondMenuPane, screenWidth, screenHeight);
 
@@ -96,14 +99,21 @@ public class App extends Application {
             stage.setScene(secondMenuScene);
         });
 
-        continueButton.setOnAction(e-> {
-            GamePane battle = new GamePane();
-            stage.setScene(battle.getScene());
-        });
         newGameButton.setOnAction(e -> {
-            GamePane battle = new GamePane();
+            GamePane battle = new GamePane(MyMap.mainMap);
             stage.setScene(battle.getScene());
         });
+
+        infiniteButton.setOnAction(e -> {
+            GamePane battle = new GamePane(MyMap.infiniteMap);
+            stage.setScene(battle.getScene());
+        });
+
+        ninjaleadButton.setOnAction(e -> {
+            GamePane battle = new GamePane(MyMap.ninjaleadMap);
+            stage.setScene(battle.getScene());
+        });
+        
         backButton.setOnAction(e -> stage.setScene(menuScene));
 
         //stage

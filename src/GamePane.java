@@ -29,7 +29,7 @@ public class GamePane extends Pane {
     public Scene gameScene;
     private AnimationTimer gameloop;
     
-    GamePane() {
+    GamePane(int typeOfMap) {
         // setup
         this.canvas = new Canvas(App.screenWidth, App.screenHeight);
         this.gc = canvas.getGraphicsContext2D();
@@ -37,7 +37,7 @@ public class GamePane extends Pane {
         this.getChildren().add(canvas);
         
         this.collisionHandler = new CollisionHandler();
-        this.start();
+        this.start(typeOfMap);
     }
 
     private void update(Scene scene){
@@ -72,12 +72,34 @@ public class GamePane extends Pane {
         }
 
         // monster update
+        if (this.map.hasBoss()) {
+            for (Monster monster : this.map.getBossSmallerMonster()) {
+                if (collisionHandler.checkCollision(this.plane, monster)) {
+                    this.plane.exploding();
+                }
+                for (Bullet bullet : this.plane.getBullets()) {
+                    if (collisionHandler.checkCollision(bullet, monster)) {
+                        monster.takeDamage(bullet.getDamage());
+                        explosion.add(new ExplosionAnimation(1, bullet.getX() - 30, bullet.getY() - 25));
+                        bullet.stop();
+                    }
+                }
+                for (Meteorite meteorite : this.map.getMeteorites()) {
+                    if (collisionHandler.checkCollision(monster, meteorite)) {
+                        monster.takeDamage(7);
+                        explosion.add(new ExplosionAnimation(2, meteorite.getX() + meteorite.getWidth() / 3, meteorite.getY() + meteorite.getHeight() / 3));
+                        meteorite.stop();
+                    }
+                }
+            }
+        }
         for (Monster monster : this.map.getMonsters()) {
             if (collisionHandler.checkCollision(this.plane, monster)) {
                 this.plane.exploding();
             }
             for (Bullet bullet : this.plane.getBullets()) {
                 if (collisionHandler.checkCollision(bullet, monster)) {
+                    System.out.println(bullet.getDamage());
                     monster.takeDamage(bullet.getDamage());
                     explosion.add(new ExplosionAnimation(1, bullet.getX() - 30, bullet.getY() - 25));
                     bullet.stop();
@@ -85,7 +107,7 @@ public class GamePane extends Pane {
             }
             for (Meteorite meteorite : this.map.getMeteorites()) {
                 if (collisionHandler.checkCollision(monster, meteorite)) {
-                    monster.takeDamage(7);
+                    monster.takeDamage(monster.totalHitPoint / 2);
                     explosion.add(new ExplosionAnimation(2, meteorite.getX() + meteorite.getWidth() / 3, meteorite.getY() + meteorite.getHeight() / 3));
                     meteorite.stop();
                 }
@@ -94,7 +116,12 @@ public class GamePane extends Pane {
 
         // Meteorite update
         for (Meteorite meteorite : this.map.getMeteorites()) {
-            if (collisionHandler.checkCollision(plane, meteorite)) {
+            if (this.map.hasBoss() && collisionHandler.checkCollision(this.map.getBoss(), meteorite)) {
+                this.map.getBoss().takeDMG(20);
+                explosion.add(new ExplosionAnimation(2, meteorite.getX() + meteorite.getWidth() / 3, meteorite.getY() + meteorite.getHeight() / 3));
+                meteorite.stop();
+            }
+            else if (collisionHandler.checkCollision(plane, meteorite)) {
                 this.plane.exploding();
                 explosion.add(new ExplosionAnimation(2, meteorite.getX() + meteorite.getWidth() / 3, meteorite.getY() + meteorite.getHeight() / 3));
                 meteorite.stop();
@@ -140,7 +167,7 @@ public class GamePane extends Pane {
         }
     }
 
-    private void start() {
+    private void start(int typeOfMap) {
         this.gameScene.setCursor(Cursor.NONE);
         try {
             Robot robot = new Robot();
@@ -151,7 +178,19 @@ public class GamePane extends Pane {
         }
         
         this.plane = new Plane(650, 550);
-        this.map = new MyMap(0, 0);
+        switch (typeOfMap) {
+            case MyMap.mainMap:
+                this.map = new MyMap();
+                break;
+            case MyMap.infiniteMap:
+                this.map = new InfiniteMap();
+                break;
+            case MyMap.ninjaleadMap:
+                this.map = new NinjaleadMap();
+                break;
+            default:
+                break;
+        }
 
         gameloop = new AnimationTimer(){
             private long prevTime = 0;
@@ -193,21 +232,21 @@ public class GamePane extends Pane {
             stage.setScene(App.menuScene);
         });
 
-        // restart button
-        Button restartButton = new Button();
-        ImageView restart = new ImageView("file:images/start.png");
-        restartButton.setTranslateX(930);
-        restartButton.setTranslateY(630);
-        restartButton.setPrefSize(restart.getFitWidth(), restart.getFitHeight());
-        restartButton.setGraphic(restart);
-        restartButton.setStyle("-fx-background-color: Transparent");
-        restartButton.setCursor(Cursor.HAND);
-        restartButton.setOnAction(e-> {
-            this.getChildren().removeAll(gameOverBg,exitButton,restartButton);
-            this.start();
-        });
+        // // restart button
+        // Button restartButton = new Button();
+        // ImageView restart = new ImageView("file:images/start.png");
+        // restartButton.setTranslateX(930);
+        // restartButton.setTranslateY(630);
+        // restartButton.setPrefSize(restart.getFitWidth(), restart.getFitHeight());
+        // restartButton.setGraphic(restart);
+        // restartButton.setStyle("-fx-background-color: Transparent");
+        // restartButton.setCursor(Cursor.HAND);
+        // restartButton.setOnAction(e-> {
+        //     this.getChildren().removeAll(gameOverBg,exitButton,restartButton);
+        //     this.start();
+        // });
 
-        this.getChildren().addAll(gameOverBg,exitButton,restartButton);
+        this.getChildren().addAll(gameOverBg,exitButton/*,restartButton*/);
     }
 
     public void gameWin(){
