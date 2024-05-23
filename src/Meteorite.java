@@ -8,7 +8,7 @@ public class Meteorite extends Entity {
     // TODO: chưa có warningline
     private Timeline warningTimeline, movingTimeline;
     private boolean moving, drawWarning=false;
-    private Image warningSign = new Image("file:images/entity/warning.png");
+    // private Image warningSign = new Image("file:images/entity/warning.png");
     Meteorite(double xPos) {
         this.setImage(new Image("file:images/entity/entity2.png"));
         this.setX(xPos);
@@ -37,7 +37,7 @@ public class Meteorite extends Entity {
 
     @Override
     public void draw(GraphicsContext gc) {
-        gc.drawImage(warningSign, this.getX(), 0, warningSign.getWidth(), warningSign.getHeight());
+        // gc.drawImage(warningSign, this.getX(), 0, warningSign.getWidth(), warningSign.getHeight());
         gc.fillRect(this.getColliBox().getX(), this.getColliBox().getY(), this.getColliBox().getWidth(), this.getColliBox().getHeight());
         gc.drawImage(this.getImage(), this.getX(), this.getY(), this.getWidth(), this.getHeight());
     }

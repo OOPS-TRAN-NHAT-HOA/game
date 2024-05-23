@@ -103,7 +103,7 @@ public class Monster extends Entity {
             return new DropItem(DropItem.Items.UPGRADGEBULLETS, this.getX(), this.getY());
         }
         p = rand.nextDouble(0, 1);
-        if (p < 1) { // 5% for shield
+        if (p < 0.05) { // 5% for shield
             return new DropItem(DropItem.Items.SHIELD, this.getX(), this.getY());
         }
         return null;

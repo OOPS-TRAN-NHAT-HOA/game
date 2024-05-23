@@ -21,7 +21,7 @@ public class Plane extends Entity {
     private List<Bullet> planeBullets;
     protected int bulletLevel = 1;
 
-    private final double xOffset = 65, yOffset = 45;//offset of the colliBox from the Image
+    private final double xOffset = 90, yOffset = 91;//offset of the colliBox from the Image
     private Sprite currentSprite, movingPlane, shootingPlane, explodingPlane;
     private final int framePerSprite = 6;
     private int spriteCounter = 0;
@@ -102,8 +102,6 @@ public class Plane extends Entity {
     @Override
     public void draw(GraphicsContext gc){
 
-        //debug the colliBox
-        // gc.fillRect(this.getColliBox().getX(), this.getColliBox().getY(), this.getColliBox().getWidth(), this.getColliBox().getHeight());
 
         if (this.isCollidable == false && this.shieldState == 1) {
             gc.drawImage(this.shield, this.getX(), this.getY(), this.getWidth(), this.getHeight());
@@ -122,6 +120,8 @@ public class Plane extends Entity {
                 bullet.draw(gc);
             }
         }
+        //debug the colliBox
+        gc.fillRect(this.getColliBox().getX(), this.getColliBox().getY(), this.getColliBox().getWidth(), this.getColliBox().getHeight());
     }
 
     public void moveTo(double x, double y) {
