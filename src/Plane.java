@@ -21,7 +21,7 @@ public class Plane extends Entity {
     private List<Bullet> planeBullets;
     protected int bulletLevel = 1;
 
-    private final double xOffset = 90, yOffset = 91;//offset of the colliBox from the Image
+    private final double xOffset = 85, yOffset = 85;//offset of the colliBox from the Image
     private Sprite currentSprite, movingPlane, shootingPlane, explodingPlane;
     private final int framePerSprite = 6;
     private int spriteCounter = 0;
