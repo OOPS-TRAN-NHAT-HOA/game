@@ -15,6 +15,7 @@ public class Meteorite extends Entity {
         this.setY(-100);
         this.setCollidable(true);
         this.moving = true;
+        this.setColliBox(-100,-100,1,1);
         // 1.5 seconds
         warningTimeline = new Timeline(new KeyFrame(Duration.millis(100), e -> {
         }));

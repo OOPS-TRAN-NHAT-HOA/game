@@ -58,8 +58,19 @@ public class GamePane extends Pane {
                     explosion.add(new ExplosionAnimation(1, bullet.getX() - 30, bullet.getY() - 25));
                     this.map.getBoss().takeDMG(bullet.getDamage());
                 }
-            } 
+                for (Monster smallerMonster : this.map.getBoss().getSmallerMonster()){
+                    if(collisionHandler.checkCollision(bullet,smallerMonster)){
+                        bullet.stop();
+                        explosion.add(new ExplosionAnimation(1, bullet.getX() - 30, bullet.getY() - 25));
+                        smallerMonster.takeDamage(bullet.getDamage());
+                    }
+                    if(collisionHandler.checkCollision(this.plane, smallerMonster)){
+                        this.plane.exploding();
+                    }
+                }
+            }
         }
+
         // monster update
         for (Monster monster : this.map.getMonsters()) {
             if (collisionHandler.checkCollision(this.plane, monster)) {
@@ -110,14 +121,14 @@ public class GamePane extends Pane {
         }
 
         //winning
-        // if(this.map.isWinning()){
-        //     gameWin();
-        // }
+        if(this.map.isWinning()){
+            gameWin();
+        }
     }
 
     private void draw(GraphicsContext gc){
         if(plane.isAlive()){
-            gc.clearRect(0, 0, gameWidth, gameHeight);
+            gc.clearRect(0, 0, App.screenWidth, App.screenHeight);
             this.map.draw(gc);
             this.plane.draw(gc);
             for (ExplosionAnimation ex : explosion) {
@@ -161,7 +172,7 @@ public class GamePane extends Pane {
     }
 
     private void gameOver(){
-        gc.clearRect(0, 0, gameWidth, gameHeight);
+        gc.clearRect(0, 0, App.screenWidth, App.screenHeight);
         gameloop.stop();
         gameScene.setCursor(Cursor.DEFAULT);
         ImageView gameOverBg = new ImageView("file:images/game-over.png");
@@ -200,7 +211,7 @@ public class GamePane extends Pane {
     }
 
     public void gameWin(){
-
+        gc.clearRect(0, 0, App.screenWidth, App.screenHeight);
     }    
 
     public double getScreenWidth(){
