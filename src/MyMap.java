@@ -1,30 +1,29 @@
 import java.util.*;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.util.Duration;
 import javafx.scene.image.Image;
 public class MyMap extends Entity {
-	final static int mainMap = 1;
-	final static int infiniteMap = 2;
-	final static int ninjaleadMap = 3;
-
+	// TODO: làm 3 phase, mỗi phase ra một loại quái mới, phase cuối có con boss
 	enum MonsterType{
 		CHICKEN1,
 		CHICKEN2
 	}
 
-	protected boolean winningMap = false;
-	protected List<Monster> monsters;
-	protected List<DropItem> dropItems;
-	protected List<Meteorite> meteorites;
-	protected Sprite background = new Sprite();
-	protected Random rand = new Random();
-	protected ChickenBoss boss;
-	protected int currentWave;
-	protected int spriteCounter = -1;
-	protected final int framePerSprite = 2;
-	protected boolean hasBoss = false;
-
-	public MyMap(){
-		this.setImage("file:images/Space/space.png", 0, 0);
+	private boolean winningMap = false;
+    private List<Monster> monsters;
+	private List<DropItem> dropItems;
+	private List<Meteorite> meteorites;
+	private Sprite background = new Sprite();
+	private Random rand = new Random();
+	private ChickenBoss boss;
+	private int currentWave;
+	private int spriteCounter = -1;
+	private final int framePerSprite = 3;
+	private boolean hasBoss = false;
+	public MyMap(double x, double y){
+		this.setImage("file:images/Space/space.png", x, y);
 		this.monsters = new ArrayList<>();
 		this.dropItems = new ArrayList<>();
 		this.meteorites = new ArrayList<>();
@@ -50,7 +49,7 @@ public class MyMap extends Entity {
 		if (rand.nextDouble(0, 1) < 0.005) {
 			meteorites.add(new Meteorite(rand.nextDouble(0, App.screenWidth)));
 		}
-		if(currentWave < 3){
+		if(currentWave<3){
 			if(monsters.isEmpty()){
 				currentWave++;
 				switch(currentWave){
@@ -81,6 +80,9 @@ public class MyMap extends Entity {
 			}
 			if(boss.isWinning()){
 				this.winningMap = true;
+				monsters.clear();
+				dropItems.clear();
+				meteorites.clear();
 			}
 		}
 	}
@@ -139,7 +141,7 @@ public class MyMap extends Entity {
 				break;
 			case CHICKEN2:
 				monster = new Monster("file:images/Invader/chicken1.1.png",30);
-				monster.setOffset(10,10);
+				// monster.setOffset(10,10);
 				break;
 			}
 			this.monsters.add(monster);

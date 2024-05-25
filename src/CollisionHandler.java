@@ -23,6 +23,11 @@ public class CollisionHandler {
         return checkCollision(plane.getColliBox(), dropItem.getColliBox());
     }
 
+    // plane - Egg
+    public boolean checkCollision(Plane plane, Egg egg) {
+        return plane.isCollidable && checkCollision(plane.getColliBox(), egg.getColliBox());
+    }
+    
     // plane - meteorite
     public boolean checkCollision(Plane plane, Meteorite meteorite) {
         return plane.isCollidable && checkCollision(plane.getColliBox(), meteorite.getColliBox());
@@ -51,10 +56,5 @@ public class CollisionHandler {
     // bullets - boss
     public boolean checkCollision(Bullet bullet, ChickenBoss boss){
         return checkCollision(bullet.getColliBox(), boss.getColliBox());
-    }
-
-    // boss - meteorite
-    public boolean checkCollision(ChickenBoss boss, Meteorite meteorite) {
-        return checkCollision(boss.getColliBox(), meteorite.getColliBox());
     }
 }

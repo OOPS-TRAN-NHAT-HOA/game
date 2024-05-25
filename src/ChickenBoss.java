@@ -1,5 +1,8 @@
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 import java.util.*;
 import javafx.scene.paint.Color;
 public class ChickenBoss extends Entity {
@@ -27,8 +30,8 @@ public class ChickenBoss extends Entity {
 
     public ChickenBoss(double x, double y){
         this.setCollidable(true);
-        this.setX(rand.nextInt(0,800));
-        this.setY(-getX());
+        this.setX(-500);
+        this.setY(-500);
         this.spawnXPos=x;
         this.spawnYPos=y;
         this.currentState = BossState.SPAWN;
@@ -51,7 +54,7 @@ public class ChickenBoss extends Entity {
         case BossState.SHOOTING_EGG:
             double p = rand.nextInt(12,24);
             for(int i =0; i<=p; i++){
-                this.bullets.add(new BossBullet(1, this.getX()+this.getWidth()/2, this.getY()+this.getHeight()/2, 360/p*i));
+                this.bullets.add(new BossBullet(1, this.getX()+this.getWidth()/2, this.getY()+this.getHeight()/2, (360/p)*i));
             }
             switchState = true;
             break;
@@ -93,9 +96,10 @@ public class ChickenBoss extends Entity {
             }
             break;
         case BossState.END:
+            this.bullets.clear();
+            this.smallerMonster.clear();
             switchState = false;
             winBoss = true;
-            System.out.println("END GAME!");
             break;
         }
 
@@ -226,8 +230,6 @@ public class ChickenBoss extends Entity {
                     }
                 }
                 break;
-                default:
-                    break;
             }}
             else{
                 switch(currentState){

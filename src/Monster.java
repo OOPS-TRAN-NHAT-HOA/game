@@ -14,7 +14,7 @@ public class Monster extends Entity {
     private Timeline timeline;
     private double xOffset = 10, yOffset = 5;//offset of the colliBox from the Image
 
-    protected int currentHitPoint, totalHitPoint;
+    private int currentHitPoint, totalHitPoint;
 
     private Random rand = new Random();
 
@@ -35,7 +35,7 @@ public class Monster extends Entity {
     @Override
     public void draw(GraphicsContext gc) {
         // debug the colliBox  
-        gc.fillRect(this.getColliBox().getX(), this.getColliBox().getY(), this.getColliBox().getWidth(), this.getColliBox().getHeight());
+        // gc.fillRect(this.getColliBox().getX(), this.getColliBox().getY(), this.getColliBox().getWidth(), this.getColliBox().getHeight());
 
         //draw HP bar
         gc.setFill(Color.WHITE);
@@ -45,10 +45,6 @@ public class Monster extends Entity {
         gc.fillRect(this.getX()+20, this.getY()-20, (this.getWidth()-40)*remainingHealth, 10);
         gc.drawImage(this.getImage(), this.getX(), this.getY(), this.getWidth(), this.getHeight());
     }
-
-    // public void update(){
-    //     this.setColliBox(this.getX()+xOffset, this.getY()+yOffset, this.getWidth()-2*xOffset, this.getHeight()-2*yOffset);  
-    // }
 
     public void newVelocity() {
         Vx = rand.nextDouble(-3, 3);
@@ -94,8 +90,11 @@ public class Monster extends Entity {
     public DropItem dropSomething() {
         double p = rand.nextDouble(0, 1);
         // System.out.println(p);
+        if (p < 0.05) { // 5% for heart
+            return new DropItem(DropItem.Items.HEART, this.getX(), this.getY());
+        }
         p = rand.nextDouble(0, 1);
-        if (p < 0.1) { // 10% for bullet
+        if (p < 0.10) { // 10% for bullet
             return new DropItem(DropItem.Items.UPGRADGEBULLETS, this.getX(), this.getY());
         }
         p = rand.nextDouble(0, 1);
