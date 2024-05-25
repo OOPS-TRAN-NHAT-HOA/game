@@ -215,13 +215,15 @@ public class GamePane extends Pane {
         gameloop.stop();
         gameScene.setCursor(Cursor.DEFAULT);
         ImageView gameOverBg = new ImageView("file:images/game-over.png");
-        gameOverBg.setFitWidth(gameWidth);
-        gameOverBg.setFitHeight(gameHeight);
+        gameOverBg.setFitWidth(App.screenWidth);
+        gameOverBg.setFitHeight(App.screenHeight);
         // exit button
         Button exitButton = new Button();
-        ImageView exit = new ImageView("file:images/exit.png");
-        exitButton.setTranslateX(30);
-        exitButton.setTranslateY(630);
+        ImageView exit = new ImageView("file:images/UI/back3.png");
+        exit.setFitWidth(216);
+        exit.setFitHeight(108);
+        exitButton.setTranslateX(600);
+        exitButton.setTranslateY(570);
         exitButton.setPrefSize(exit.getFitWidth(), exit.getFitHeight());
         exitButton.setGraphic(exit);
         exitButton.setStyle("-fx-background-color: Transparent");
@@ -232,25 +234,36 @@ public class GamePane extends Pane {
             stage.setScene(App.menuScene);
         });
 
-        // // restart button
-        // Button restartButton = new Button();
-        // ImageView restart = new ImageView("file:images/start.png");
-        // restartButton.setTranslateX(930);
-        // restartButton.setTranslateY(630);
-        // restartButton.setPrefSize(restart.getFitWidth(), restart.getFitHeight());
-        // restartButton.setGraphic(restart);
-        // restartButton.setStyle("-fx-background-color: Transparent");
-        // restartButton.setCursor(Cursor.HAND);
-        // restartButton.setOnAction(e-> {
-        //     this.getChildren().removeAll(gameOverBg,exitButton,restartButton);
-        //     this.start();
-        // });
-
-        this.getChildren().addAll(gameOverBg,exitButton/*,restartButton*/);
+        this.getChildren().addAll(gameOverBg,exitButton);
     }
 
-    public void gameWin(){
+        public void gameWin(){
+        gameloop.stop();
         gc.clearRect(0, 0, App.screenWidth, App.screenHeight);
+        System.out.println("Game WIN!");
+        Stage stage = (Stage) this.gameScene.getWindow();
+        this.getChildren().remove(canvas);
+        gameScene.setCursor(Cursor.DEFAULT);
+        ImageView gameOverBg = new ImageView("file:images/UI/youWin.png");
+        gameOverBg.setFitWidth(App.screenWidth);
+        gameOverBg.setFitHeight(App.screenHeight);
+        // exit button
+        Button exitButton = new Button();
+        ImageView exit = new ImageView("file:images/UI/back3.png");
+        exit.setFitWidth(216);
+        exit.setFitHeight(108);
+        exitButton.setTranslateX(600);
+        exitButton.setTranslateY(570);
+        exitButton.setPrefSize(exit.getFitWidth(), exit.getFitHeight());
+        exitButton.setGraphic(exit);
+        exitButton.setStyle("-fx-background-color: Transparent");
+        exitButton.setCursor(Cursor.HAND);
+        exitButton.setOnAction(e-> {
+            App.planeType = -1;
+            stage.setScene(App.menuScene);
+        });
+
+        this.getChildren().addAll(gameOverBg,exitButton);
     }    
 
     public double getScreenWidth(){

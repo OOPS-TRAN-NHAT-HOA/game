@@ -1,6 +1,7 @@
 import java.util.*;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 public class MyMap extends Entity {
 	final static int mainMap = 1;
 	final static int infiniteMap = 2;
@@ -19,6 +20,7 @@ public class MyMap extends Entity {
 	protected Random rand = new Random();
 	protected ChickenBoss boss;
 	protected int currentWave;
+	private int score = 0;
 	protected int spriteCounter = -1;
 	protected final int framePerSprite = 2;
 	protected boolean hasBoss = false;
@@ -42,6 +44,7 @@ public class MyMap extends Entity {
         this.spriteCounter++;
         if( this.spriteCounter > framePerSprite){
             this.spriteCounter = 0;
+            score++;
         }
         background.setCurrentSpriteNum(spriteCounter);
         this.image = background.getCurrentSprite();
@@ -81,6 +84,9 @@ public class MyMap extends Entity {
 			}
 			if(boss.isWinning()){
 				this.winningMap = true;
+				monsters.clear();
+				dropItems.clear();
+				meteorites.clear();
 			}
 		}
 	}
@@ -145,19 +151,6 @@ public class MyMap extends Entity {
 			this.monsters.add(monster);
 		}
 	}
-	
-	// public void move() {
-	// 	Timeline timeline = new Timeline(new KeyFrame(Duration.millis(50), e-> {
-	// 		if (this.getY() + 3 > this.getHeight()) {
-	// 			this.setY(0);
-	// 		}
-	// 		else {
-	// 			this.setY(this.getY() + 1);
-	// 		}
-	// 	}));
-	// 	timeline.setCycleCount(Timeline.INDEFINITE);
-	// 	timeline.play();
-	// }
 
 	public boolean isWinning(){
 		return winningMap;
