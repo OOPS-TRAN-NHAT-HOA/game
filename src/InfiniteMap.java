@@ -2,6 +2,11 @@ import java.util.Iterator;
 import java.util.Random;
 
 public class InfiniteMap extends MyMap {
+	InfiniteMap(){
+		this.currentMap = infiniteMap;
+		this.hasBoss = true;
+		this.boss = new ChickenBoss(500, 200);
+	}
 	public void update(){
 		//update background
 		//spriteCounter becomes 0 after each time it reachs framePerSprite
@@ -12,11 +17,12 @@ public class InfiniteMap extends MyMap {
         background.setCurrentSpriteNum(spriteCounter);
         this.image = background.getCurrentSprite();
 
-		// 0.5% per frame
-		if (rand.nextDouble(0, 1) < 0.005) {
-			meteorites.add(new Meteorite(rand.nextDouble(0, App.screenWidth)));
-		}
-		if (this.hasBoss) {
+        if(currentMap == infiniteMap){
+			// 0.5% per frame
+			if (rand.nextDouble(0, 1) < 0.005) {
+				meteorites.add(new Meteorite(rand.nextDouble(0, App.screenWidth)));
+			}
+
 			this.boss.update();
 			Iterator<Monster> it = this.boss.getSmallerMonster().iterator();
 			while (it.hasNext()) {
@@ -30,24 +36,8 @@ public class InfiniteMap extends MyMap {
 				}
 			}
 			if(boss.isWinning()){
-				this.winningMap = true;
+				this.boss.resetBoss();
 			}
-		}
-        else if(monsters.isEmpty()){
-            currentWave = new Random().nextInt(1, 4);
-			System.out.println(currentWave);
-            switch(currentWave){
-            case 1:
-                spawn(MonsterType.CHICKEN1);
-                break;
-            case 2:
-                spawn(MonsterType.CHICKEN2);
-                break;
-            case 3:
-                this.hasBoss = true;
-				this.boss = new ChickenBoss(500, 200);
-                break;
-            }
-        }
+	    }
 	}
 }

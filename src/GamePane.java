@@ -11,10 +11,18 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
+import javafx.scene.text.Text;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.Cursor;
+import javafx.event.EventHandler;
+import javafx.scene.input.KeyEvent;
 
 public class GamePane extends Pane {
+    static enum GameState{
+        PLAY,
+        PAUSE
+    }
     private final int fps = 60;
     private double gameWidth;
     private double gameHeight;
@@ -23,7 +31,7 @@ public class GamePane extends Pane {
     private Plane plane;
     private CollisionHandler collisionHandler;
     private List<ExplosionAnimation> explosion = new ArrayList<>();
-
+    private GameState currentState;
     public Canvas canvas;
     public GraphicsContext gc;
     public Scene gameScene;
@@ -34,6 +42,16 @@ public class GamePane extends Pane {
         this.canvas = new Canvas(App.screenWidth, App.screenHeight);
         this.gc = canvas.getGraphicsContext2D();
         this.gameScene = new Scene(this);
+        this.currentState = GameState.PLAY;
+        gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                switch (event.getCode()) {
+                    case ESCAPE:
+                        currentState = GameState.PAUSE;
+                }
+            }
+        });
         this.getChildren().add(canvas);
         
         this.collisionHandler = new CollisionHandler();
@@ -41,8 +59,53 @@ public class GamePane extends Pane {
     }
 
     private void update(Scene scene){
+        if(currentState == GameState.PAUSE){
+            gameloop.stop();
+            // Pause Scene ----------------------------------------------------------------------------------------
+            ImageView background3 = new ImageView("file:images/UI/background2.jpg");
+            background3.setFitWidth(App.screenWidth);
+            background3.setFitHeight(App.screenHeight);
+
+            ImageView pauseImage = new ImageView("file:images/UI/pause.png");
+            pauseImage.setTranslateX(300);
+            pauseImage.setTranslateY(300);
+
+            ImageView continueImage = new ImageView("file:images/UI/continue.png");
+            Button continueImageButton = new Button();
+            continueImage.setFitWidth(64);
+            continueImage.setFitHeight(64);
+            continueImageButton.setTranslateX(520);
+            continueImageButton.setTranslateY(420);
+            continueImageButton.setPrefSize(continueImage.getFitWidth(), continueImage.getFitHeight());
+            continueImageButton.setGraphic(continueImage);
+            continueImageButton.setStyle("-fx-background-color: Transparent");
+            continueImageButton.setCursor(Cursor.HAND);
+
+            Button backButton = new Button();
+            ImageView back = new ImageView("file:images/UI/level.png");
+            back.setFitWidth(64);
+            back.setFitHeight(64);
+            backButton.setTranslateX(620);
+            backButton.setTranslateY(420);
+            backButton.setPrefSize(back.getFitWidth(), back.getFitHeight());
+            backButton.setGraphic(back);
+            backButton.setStyle("-fx-background-color: Transparent");
+            backButton.setCursor(Cursor.HAND);
+
+            App.pausePane.getChildren().addAll(background3, pauseImage, continueImageButton, backButton);
+            Stage stage = (Stage) this.gameScene.getWindow();
+            stage.setScene(App.pauseScene);
+            continueImageButton.setOnAction(e->{
+                currentState = GameState.PLAY;
+                stage.setScene(this.gameScene);
+                gameloop.start();
+            });
+            backButton.setOnAction(e-> {
+                stage.setScene(App.menuScene);
+            });
+            return;
+        }
         plane.update(scene);
-        // if (this.map.getMonsters().size() == 0 && this.plane.isAlive()) 
         if(this.plane.isAlive()){
             this.map.update();
         }
@@ -222,7 +285,7 @@ public class GamePane extends Pane {
         ImageView exit = new ImageView("file:images/UI/back3.png");
         exit.setFitWidth(216);
         exit.setFitHeight(108);
-        exitButton.setTranslateX(600);
+        exitButton.setTranslateX(500);
         exitButton.setTranslateY(570);
         exitButton.setPrefSize(exit.getFitWidth(), exit.getFitHeight());
         exitButton.setGraphic(exit);
@@ -234,7 +297,11 @@ public class GamePane extends Pane {
             stage.setScene(App.menuScene);
         });
 
-        this.getChildren().addAll(gameOverBg,exitButton);
+        String myString = "Your score are: " + this.map.getScore();
+        Text t = new Text(20, 50, myString);
+        t.setFont(new Font(40));
+        t.setFill(javafx.scene.paint.Color.WHITE);
+        this.getChildren().addAll(gameOverBg,exitButton,t);
     }
 
         public void gameWin(){
@@ -245,14 +312,13 @@ public class GamePane extends Pane {
         this.getChildren().remove(canvas);
         gameScene.setCursor(Cursor.DEFAULT);
         ImageView gameOverBg = new ImageView("file:images/UI/youWin.png");
-        gameOverBg.setFitWidth(App.screenWidth);
         gameOverBg.setFitHeight(App.screenHeight);
         // exit button
         Button exitButton = new Button();
         ImageView exit = new ImageView("file:images/UI/back3.png");
         exit.setFitWidth(216);
         exit.setFitHeight(108);
-        exitButton.setTranslateX(600);
+        exitButton.setTranslateX(500);
         exitButton.setTranslateY(570);
         exitButton.setPrefSize(exit.getFitWidth(), exit.getFitHeight());
         exitButton.setGraphic(exit);
@@ -263,7 +329,11 @@ public class GamePane extends Pane {
             stage.setScene(App.menuScene);
         });
 
-        this.getChildren().addAll(gameOverBg,exitButton);
+        String myString = "Your score are: " + this.map.getScore();
+        Text t = new Text(20, 50, myString);
+        t.setFont(new Font(40));
+        t.setFill(javafx.scene.paint.Color.BLACK);
+        this.getChildren().addAll(gameOverBg,exitButton,t);
     }    
 
     public double getScreenWidth(){

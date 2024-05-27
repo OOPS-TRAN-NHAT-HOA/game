@@ -19,16 +19,12 @@ public class App extends Application {
     static protected Pane secondMenuPane;
     static protected Scene secondMenuScene;
 
-    static protected Pane thirdMenuPane;
-    static protected Scene thirdMenuScene;
+    static protected Pane pausePane = new Pane();
+    static protected Scene pauseScene = new Scene(App.pausePane, App.screenWidth, App.screenHeight);
 
-    static protected double screenWidth;
-    static protected double screenHeight;
-    static {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        screenWidth = screenSize.getWidth();
-        screenHeight = screenSize.getHeight();
-    }
+    static final protected double screenWidth = 1200;
+    static final protected double screenHeight = 720;
+ 
     static public int planeType = -1;
 
     @Override
@@ -52,7 +48,7 @@ public class App extends Application {
         Button playButton = new Button();
         play.setFitWidth(216);
         play.setFitHeight(108);
-        playButton.setTranslateX(600);
+        playButton.setTranslateX(500);
         playButton.setTranslateY(570);
         playButton.setPrefSize(play.getFitWidth(), play.getFitHeight());
         playButton.setGraphic(play);
@@ -63,7 +59,7 @@ public class App extends Application {
         Button aboutButton = new Button();
         about.setFitWidth(216);
         about.setFitHeight(108);
-        aboutButton.setTranslateX(200);
+        aboutButton.setTranslateX(100);
         aboutButton.setTranslateY(570);
         aboutButton.setPrefSize(about.getFitWidth(), about.getFitHeight());
         aboutButton.setGraphic(about);
@@ -74,7 +70,7 @@ public class App extends Application {
         ImageView back = new ImageView("file:images/UI/back.png");
         back.setFitWidth(216);
         back.setFitHeight(108);
-        backButton.setTranslateX(1000);
+        backButton.setTranslateX(900);
         backButton.setTranslateY(570);
         backButton.setPrefSize(back.getFitWidth(), back.getFitHeight());
         backButton.setGraphic(back);
@@ -120,19 +116,19 @@ public class App extends Application {
         background2.setFitHeight(screenHeight);
 
         ImageView gameSelect = new ImageView("file:images/UI/gameSelect.png");
-        gameSelect.setTranslateX(350); 
+        gameSelect.setTranslateX(220); 
         gameSelect.setTranslateY(50);
 
         ImageView stageMode = new ImageView("file:images/UI/stageMode.png");
         stageMode.setFitWidth(216);
         stageMode.setFitHeight(108);
-        Button newGameButton= new Button();
-        newGameButton.setPrefSize(stageMode.getFitWidth(), stageMode.getFitHeight());
-        newGameButton.setGraphic(stageMode);
-        newGameButton.setStyle("-fx-background-color: Transparent"); 
-        newGameButton.setTranslateX(100); 
-        newGameButton.setTranslateY(570);
-        newGameButton.setCursor(Cursor.HAND);
+        Button stageModeButton= new Button();
+        stageModeButton.setPrefSize(stageMode.getFitWidth(), stageMode.getFitHeight());
+        stageModeButton.setGraphic(stageMode);
+        stageModeButton.setStyle("-fx-background-color: Transparent"); 
+        stageModeButton.setTranslateX(50); 
+        stageModeButton.setTranslateY(570);
+        stageModeButton.setCursor(Cursor.HAND);
 
         ImageView infiniteMode = new ImageView("file:images/UI/infiniteMode.png");
         infiniteMode.setFitWidth(216);
@@ -141,7 +137,7 @@ public class App extends Application {
         infiniteButton.setPrefSize(infiniteMode.getFitWidth(), infiniteMode.getFitHeight());
         infiniteButton.setGraphic(infiniteMode);
         infiniteButton.setStyle("-fx-background-color: Transparent"); 
-        infiniteButton.setTranslateX(450); 
+        infiniteButton.setTranslateX(350); 
         infiniteButton.setTranslateY(570);
         infiniteButton.setCursor(Cursor.HAND);
 
@@ -152,7 +148,7 @@ public class App extends Application {
         ninjaButton.setPrefSize(ninjaMode.getFitWidth(), ninjaMode.getFitHeight());
         ninjaButton.setGraphic(ninjaMode);
         ninjaButton.setStyle("-fx-background-color: Transparent"); 
-        ninjaButton.setTranslateX(800); 
+        ninjaButton.setTranslateX(650); 
         ninjaButton.setTranslateY(570);
         ninjaButton.setCursor(Cursor.HAND);
 
@@ -160,17 +156,17 @@ public class App extends Application {
         ImageView back3 = new ImageView("file:images/UI/back3.png");
         back3.setFitWidth(216);
         back3.setFitHeight(108);
-        backButton3.setTranslateX(1150);
+        backButton3.setTranslateX(950);
         backButton3.setTranslateY(570);
         backButton3.setPrefSize(back3.getFitWidth(), back3.getFitHeight());
         backButton3.setGraphic(back3);
         backButton3.setStyle("-fx-background-color: Transparent");
         backButton3.setCursor(Cursor.HAND);
 
-        App.secondMenuPane.getChildren().addAll(background2, gameSelect, newGameButton, infiniteButton, ninjaButton, backButton3);
+        App.secondMenuPane.getChildren().addAll(background2, gameSelect, stageModeButton, infiniteButton, ninjaButton, backButton3);
         App.secondMenuScene = new Scene(secondMenuPane, screenWidth, screenHeight);
 
-        newGameButton.setOnAction(e -> {
+        stageModeButton.setOnAction(e -> {
             GamePane battle = new GamePane(MyMap.mainMap);
             stage.setScene(battle.getScene());
         });
@@ -191,23 +187,15 @@ public class App extends Application {
 
 
         // ----------------------------------------------------------------------------------------------------
-        
+
         // ----------------------------------------------------------------------------------------------------
 
         
-        // exitButton.setOnAction(e-> stage.close());
-        // startButton.setOnAction(e-> {
-        //     stage.setScene(secondMenuScene);
-        // });
-
-        
-        
-        // backButton.setOnAction(e -> stage.setScene(menuScene));
-
         //stage
-        stage.setTitle("Chicken Invaders");
+        stage.setTitle("StarWing");
         stage.setScene(menuScene);
         stage.setFullScreen(false);
+        stage.setResizable(false); 
         stage.show();
     }
 
@@ -219,14 +207,14 @@ public class App extends Application {
         c = new Color(0, 0, 0, 0.8);
         gc.setFill(c);
         gc.fillRoundRect(x+5, y+5, width - 10, height - 10, 25, 25);
-        String message = "Hãy sẵn sàng cho một trải nghiệm chiến đấu không gian đầy kịch tính \nvà hồi hộp! Trong \"StarWing: Máy Bay Bắn Quái\", bạn sẽ nhập vai phi \ncông của chiếc phi thuyền chiến đấu hiện đại nhất của Liên Minh Liên \nSao, đối mặt với những đợt tấn công khốc liệt từ lũ quái vật không gian \nhung ác. Trong tương lai xa xôi, khi nhân loại đã khám phá và định cư \ntrên nhiều hành tinh, xuất hiện những sinh vật ngoài hành tinh khổng lồ \nvà tàn ác, được gọi là Quái Không Gian, bắt đầu xâm chiếm các thuộc \nđịa của con người. Để bảo vệ sự sống còn của Liên Minh Liên Sao, đội \nphi công tinh nhuệ StarWing được thành lập. Với vai trò là phi công xuất \nsắc của đội StarWing, hãy sử dụng kỹ năng của mình để tiêu diệt kẻ thù \nvà bảo vệ hòa bình cho thiên hà!";
-        int textXOffset = 15, textYOffset = 60;
+        String message = "Hãy sẵn sàng cho một trải nghiệm chiến đấu không gian đầy kịch tính và \nhồi hộp! Trong \"StarWing: Máy Bay Bắn Quái\", bạn sẽ nhập vai phi công \ncủa chiếc phi thuyền chiến đấu hiện đại nhất của Liên Minh Liên Sao, đối \nmặt với những đợt tấn công khốc liệt từ lũ quái vật không gian hung ác. \nTrong tương lai xa xôi, khi nhân loại đã khám phá và định cư trên nhiều \nhành tinh, xuất hiện những sinh vật ngoài hành tinh khổng lồ và tàn ác, \nđược gọi là Quái Không Gian, bắt đầu xâm chiếm các thuộc địa của con \nngười. Để bảo vệ sự sống còn của Liên Minh Liên Sao, đội phi công tinh \nnhuệ StarWing được thành lập. Với vai trò là phi công xuất sắc của đội \nStarWing, hãy sử dụng kỹ năng của mình để tiêu diệt kẻ thù và bảo vệ \nhòa bình cho thiên hà!";
+        int textXOffset = 20, textYOffset = 40;
         int textX = x+textXOffset, textY = y+textYOffset;
         gc.setFill(Color.WHITE);
-        gc.setFont(new Font("Verdana", 30F));
+        gc.setFont(new Font("Verdana", 23F));
         for(String line : message.split("\n")){
             gc.fillText(line, textX , textY);
-            textY += 50;
+            textY += 45;
         }
     }
 

@@ -1,3 +1,4 @@
+package mySrc;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
@@ -39,7 +40,7 @@ public class Meteorite extends Entity {
     @Override
     public void draw(GraphicsContext gc) {
         // gc.drawImage(warningSign, this.getX(), 0, warningSign.getWidth(), warningSign.getHeight());
-        gc.fillRect(this.getColliBox().getX(), this.getColliBox().getY(), this.getColliBox().getWidth(), this.getColliBox().getHeight());
+        // gc.fillRect(this.getColliBox().getX(), this.getColliBox().getY(), this.getColliBox().getWidth(), this.getColliBox().getHeight());
         gc.drawImage(this.getImage(), this.getX(), this.getY(), this.getWidth(), this.getHeight());
     }
 

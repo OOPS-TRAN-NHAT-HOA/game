@@ -5,6 +5,8 @@ import javafx.animation.Timeline;
 import javafx.scene.Scene;
 import javafx.util.Duration;
 import java.util.*; 
+import javafx.scene.media.*;
+import java.io.File;
 
 enum PlaneState{
     MOVING,
@@ -20,21 +22,20 @@ public class Plane extends Entity {
     private Timeline shootingTimeline;
     private List<Bullet> planeBullets;
     protected int bulletLevel = 1;
-    public int bulletdmg = 1;
+    public int bulletdmg = 3;
 
     private final double xOffset = 90, yOffset = 90;//offset of the colliBox from the Image
     private Sprite currentSprite, movingPlane, shootingPlane, explodingPlane;
     private final int framePerSprite = 6;
     private int spriteCounter = 0;
     private PlaneState state;
-
     private Image shield;
     private int shieldState = 1; // 1 is visible, 0 otherwise
     private Timeline invisibleTimeline, flickerTimeline;
     
 
     Plane(int x, int y) {
-        this.invisible(5);
+        this.invisible(3);
         this.alive = true;
         this.planeBullets = new ArrayList<>();
         this.shield = new Image("file:images/items/Shield/item-shield-on100.png");

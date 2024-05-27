@@ -41,6 +41,7 @@ public class ChickenBoss extends Entity {
             }
         }
         this.image = chickenBossSprite.getCurrentSprite();
+         this.setColliBox(this.getX()+xOffset, this.getY()+yOffset, this.getWidth()-2*xOffset, this.getHeight()-2*yOffset);
     }
 
     public void update(){
@@ -49,9 +50,16 @@ public class ChickenBoss extends Entity {
             spawn(spawnXPos, spawnYPos);
             break;
         case BossState.SHOOTING_EGG:
-            double p = rand.nextInt(12,24);
+            double p = rand.nextInt(4,24);
+            double r = rand.nextDouble();
+            if(r>0.5){
+                r=720;
+            }
+            else{
+                r=360;
+            }
             for(int i =0; i<=p; i++){
-                this.bullets.add(new BossBullet(1, this.getX()+this.getWidth()/2, this.getY()+this.getHeight()/2, 360/p*i));
+                this.bullets.add(new BossBullet(1, this.getX()+this.getWidth()/2, this.getY()+this.getHeight()/2, (r/p)*i));
             }
             switchState = true;
             break;
@@ -131,7 +139,7 @@ public class ChickenBoss extends Entity {
             }
         }
         //debug the colliBox
-        gc.fillRect(this.getColliBox().getX(), this.getColliBox().getY(), this.getColliBox().getWidth(), this.getColliBox().getHeight());
+        // gc.fillRect(this.getColliBox().getX(), this.getColliBox().getY(), this.getColliBox().getWidth(), this.getColliBox().getHeight());
         
         //draw HP bar
         gc.setFill(Color.WHITE);
@@ -175,7 +183,6 @@ public class ChickenBoss extends Entity {
         double coorX = this.getX()+vX, coorY = this.getY()+vY;
         this.setX(coorX);
         this.setY(coorY);
-        System.out.println(coorX + " " + coorY);
         return false;
     }
 
@@ -270,6 +277,13 @@ public class ChickenBoss extends Entity {
 
     public boolean isWinning(){
         return winBoss;
+    }
+
+    public void resetBoss(){
+        this.winBoss = false;
+        this.totalHP*=2;
+        this.currentHP=this.totalHP;
+        this.currentState = BossState.SPAWN;
     }
 }
 

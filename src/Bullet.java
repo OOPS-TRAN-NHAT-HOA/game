@@ -8,20 +8,20 @@ public class Bullet extends Entity {
     private double Vy;
     private boolean moving;
     private Timeline timeline;
-    private int damage;
+    private int damage ;
     private final double xOffset = 7, yOffset = 2;//offset of the colliBox from the Image
 
     Bullet() {
         this.setCollidable(true);
         this.moving = true;
-        this.damage = 1;
+        this.damage = 3;
     }
 
     Bullet(String path) {
         super(path);
         this.setCollidable(true);
         this.moving = true;
-        this.damage = 1;
+        this.damage = 3;
     }
     public void setDamage(int dmg) {
         this.damage = dmg;

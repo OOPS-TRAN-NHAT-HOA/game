@@ -9,6 +9,7 @@ public class NinjaleadMap extends MyMap {
 
     NinjaleadMap() {
         this.ratio = 0.1;
+        this.currentMap = ninjaleadMap;
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> ratio = ratio + 0.001));
         timeline.setCycleCount(400); // which mean max(ratio) == 50% per frame :)
         timeline.play();
@@ -24,14 +25,16 @@ public class NinjaleadMap extends MyMap {
         background.setCurrentSpriteNum(spriteCounter);
         this.image = background.getCurrentSprite();
 
-		// 0.5% per frame
-		if (rand.nextDouble(0, 1) < ratio) {
-			meteorites.add(new Meteorite(rand.nextDouble(0, App.screenWidth)));
-		}
-        
-        if (rand.nextDouble(0, 1) < 0.0001) {
-            this.spawn(MonsterType.CHICKEN1);
-            this.spawn(MonsterType.CHICKEN2);
+        if(currentMap == ninjaleadMap){
+    		// 0.5% per frame
+    		if (rand.nextDouble(0, 1) < ratio) {
+    			meteorites.add(new Meteorite(rand.nextDouble(0, App.screenWidth)));
+    		}
+            
+            if (rand.nextDouble(0, 1) < 0.0001) {
+                this.spawn(MonsterType.CHICKEN1);
+                this.spawn(MonsterType.CHICKEN2);
+            }
         }
     }
 }
